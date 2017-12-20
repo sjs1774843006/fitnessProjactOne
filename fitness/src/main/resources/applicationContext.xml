@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--导入jdbc.properties-->
+    <context:property-placeholder location="classpath:db.properties"></context:property-placeholder>
+    <!--配置数据源-->
+    <bean class="com.mchange.v2.c3p0.ComboPooledDataSource" id="dataSource">
+        <property name="jdbcUrl" value="${url}"></property>
+        <property name="driverClass" value="${driver_Class}"></property>
+        <property name="user" value="${uname}"></property>
+        <property name="password" value="${upass}"></property>
+
+        <property name="initialPoolSize" value="${initPoolSize}"></property>
+        <property name="maxPoolSize" value="${maxPoolSize}"></property>
+    </bean>
+    <!--配置sqlsessionfactorybean-->
+    <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
+        <!--依赖datasource-->
+        <property name="dataSource" ref="dataSource"></property>
+        <!--需要管理mybatis，所以需要引入mybatis-config.xml文件-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+        <!--扫描所有的映射文件-->
+        <property name="mapperLocations" value="classpath:com/shadow/entity/*.xml"></property>
+    </bean>
+    <!--扫描所有的mapper接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.shadow.dao"></property>
+    </bean>
+
+    <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" id="transactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <import resource="classpath:activiti.cfg.xml"></import>
+
+
+</beans>
