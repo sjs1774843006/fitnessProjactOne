@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.DataDictionaryDao">
+
+
+    <delete id="del"  parameterType="int">
+        DELETE  from  data_dictionary  where  data_id=#{data_id}
+    </delete>
+
+    <update id="update" parameterType="DataDictionaryEntity">
+        UPDATE  data_dictionary SET data_name=#{data_name},data_message=#{data_message} where data_id=#{data_id}
+    </update>
+
+
+    <select id="selectAll"  resultType="com.shadow.entity.DataDictionaryEntity"  parameterType="Map">
+        SELECT * from  data_dictionary
+        <if test="name != null  ">
+            where  data_name like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="selectCount"  resultType="int"  parameterType="Map">
+        SELECT count(*) from   data_dictionary
+        <if test="name != null ">
+            where  data_name like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.ProgressDao">
+
+    <insert id="add" parameterType="ProgressEntity">
+        INSERT INTO progress  VALUES (#{progress_id},#{progress});
+    </insert>
+
+    <delete id="del"  parameterType="int">
+        DELETE  from  progress  where  progress_id=#{progress_id}
+    </delete>
+
+    <update id="update" parameterType="ProgressEntity">
+        UPDATE  progress SET progress=#{progress} where progress_id=#{progress_id}
+    </update>
+
+    <select id="selectAll"  resultType="ProgressEntity"  parameterType="Map">
+        SELECT * from  progress
+        <if test="name != null  ">
+            where  progress like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="selectCount"  resultType="int"  parameterType="Map">
+        SELECT count(*) from   progress
+        <if test="name != null ">
+            where  progress like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="Count"  resultType="int" >
+        SELECT count(*) from   progress
+    </select>
+
+</mapper>

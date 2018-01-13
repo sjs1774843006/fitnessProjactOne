@@ -9,9 +9,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-        </sourceRoots>
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
@@ -61,7 +58,6 @@
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.3.2" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.6" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.6" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.6" level="project" />
     <orderEntry type="library" name="Maven: org.activiti:activiti-spring:5.22.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:4.1.5.RELEASE" level="project" />
@@ -77,5 +73,8 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty.orbit:javax.el:2.2.0.v201108011116" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty.orbit:com.sun.el:2.2.0.v201108011116" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty.orbit:org.eclipse.jdt.core:3.7.1" level="project" />
+    <orderEntry type="library" name="Maven: jstl:jstl:1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.2" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.2" level="project" />
   </component>
 </module>

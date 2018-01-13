@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.ConsumptionTypeDao">
+
+    <insert id="add" parameterType="ConsumptionTypeEntity">
+        INSERT INTO consumption_type  VALUES (#{consumption_type_id},#{consumption_typename});
+    </insert>
+
+    <delete id="del"  parameterType="int">
+        DELETE  from  consumption_type  where  consumption_type_id=#{consumption_type_id}
+    </delete>
+
+    <update id="update" parameterType="ConsumptionTypeEntity">
+        UPDATE  consumption_type SET consumption_typename=#{consumption_typename} where consumption_type_id=#{consumption_type_id}
+    </update>
+
+    <select id="selectAll"  resultType="ConsumptionTypeEntity"  parameterType="Map">
+        SELECT * from  consumption_type
+        <if test="name != null  ">
+            where  consumption_typename like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="selectCount"  resultType="int"  parameterType="Map">
+        SELECT count(*) from   consumption_type
+        <if test="name != null ">
+            where  consumption_typename like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="Count"  resultType="int" >
+        SELECT count(*) from   consumption_type
+    </select>
+
+</mapper>

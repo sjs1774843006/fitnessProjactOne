@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.ThecoachTypeDao">
+
+    <insert id="add" parameterType="ThecoachTypeEntity">
+        INSERT INTO thecoach_type  VALUES (#{Thecoach_type_id},#{Thecoach_type},#{Site_id},#{Thecoach_Commission_id},#{Thecoach_courses_id});
+    </insert>
+
+    <delete id="del"  parameterType="int">
+        DELETE  from  thecoach_type  where  Thecoach_type_id=#{Thecoach_type_id}
+    </delete>
+
+    <update id="update" parameterType="ThecoachTypeEntity">
+        UPDATE  thecoach_type SET Thecoach_type=#{Thecoach_type},Site_id=#{Site_id},Thecoach_Commission_id=#{Thecoach_Commission_id},Thecoach_courses_id=#{Thecoach_courses_id} where Thecoach_type_id=#{Thecoach_type_id}
+    </update>
+
+    <select id="selectAll"  resultType="ThecoachTypeEntity"  parameterType="Map">
+        SELECT * from  thecoach_type
+        <if test="name != null  ">
+            where  Thecoach_type like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="selectCount"  resultType="int"  parameterType="Map">
+        SELECT count(*) from   thecoach_type
+        <if test="name != null ">
+            where  Thecoach_type like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="Count"  resultType="int" >
+        SELECT count(*) from   thecoach_type
+    </select>
+
+</mapper>

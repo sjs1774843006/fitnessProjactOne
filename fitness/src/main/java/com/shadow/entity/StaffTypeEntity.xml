@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.StaffTypeDao">
+
+    <insert id="addStaffType" parameterType="StaffTypeEntity">
+        INSERT INTO stafftype  VALUES (#{type_id},#{type_name});
+    </insert>
+
+    <delete id="delStaffType"  parameterType="int">
+        DELETE  from  stafftype  where  type_id=#{type_id}
+    </delete>
+
+    <update id="updateStaffType" parameterType="StaffTypeEntity">
+        UPDATE  stafftype SET type_name=#{type_name} where type_id=#{type_id}
+    </update>
+
+    <select id="selectAllStaffType"  resultType="StaffTypeEntity"  parameterType="Map">
+        SELECT * from  stafftype
+        <if test="name != null  ">
+            where  type_name like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="selectCountStaffType"  resultType="int"  parameterType="Map">
+        SELECT count(*) from   stafftype
+        <if test="name != null ">
+            where  type_name like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="CountStaffType"  resultType="int" >
+        SELECT count(*) from   stafftype
+    </select>
+
+</mapper>

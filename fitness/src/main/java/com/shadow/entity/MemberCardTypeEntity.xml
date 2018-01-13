@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.MemberCardTypeDao">
+
+    <insert id="add" parameterType="MemberCardTypeEntity">
+        INSERT INTO member_card_type  VALUES (#{member_card_type_id},#{member_card_typename},#{site_id});
+    </insert>
+
+    <delete id="del"  parameterType="int">
+        DELETE  from  member_card_type  where  member_card_type_id=#{member_card_type_id}
+    </delete>
+
+    <update id="update" parameterType="MemberCardTypeEntity">
+        UPDATE  member_card_type SET member_card_typename=#{member_card_typename},site_id=#{site_id} where member_card_type_id=#{member_card_type_id}
+    </update>
+
+    <select id="selectAll"  resultType="MemberCardTypeEntity"  parameterType="Map">
+        SELECT * from  member_card_type
+        <if test="name != null  ">
+            where  member_card_typename like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="selectCount"  resultType="int"  parameterType="Map">
+        SELECT count(*) from   member_card_type
+        <if test="name != null ">
+            where  member_card_typename like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="Count"  resultType="int" >
+        SELECT count(*) from   member_card_type
+    </select>
+
+</mapper>

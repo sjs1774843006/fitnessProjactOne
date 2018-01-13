@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.CommissionDataDao">
+
+    <insert id="add" parameterType="CommissionDataEntity">
+        INSERT INTO commission_data  VALUES (#{Commission_data_id},#{Commission_data});
+    </insert>
+
+    <delete id="del"  parameterType="int">
+        DELETE  from  commission_data  where  Commission_data_id=#{Commission_data_id}
+    </delete>
+
+    <update id="update" parameterType="CommissionDataEntity">
+        UPDATE  commission_data SET Commission_data=#{Commission_data} where Commission_data_id=#{Commission_data_id}
+    </update>
+
+    <select id="selectAll"  resultType="CommissionDataEntity"  parameterType="Map">
+        SELECT * from  commission_data
+        <if test="name != null  ">
+            where  Commission_data like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="selectCount"  resultType="int"  parameterType="Map">
+        SELECT count(*) from   commission_data
+        <if test="name != null ">
+            where  Commission_data like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="Count"  resultType="int" >
+        SELECT count(*) from   commission_data
+    </select>
+
+</mapper>
