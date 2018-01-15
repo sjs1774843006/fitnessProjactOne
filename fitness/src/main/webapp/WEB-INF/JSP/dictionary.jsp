@@ -103,7 +103,7 @@
                          parent.toastr.warning('请选择需要查看的数据项', '温馨提示', messageOpts);
                          return;
                      }
-                         $('#_modalDialog').modal('show');
+                         parent.$('#_modalDialog').modal('show');
                      if(arrselections[0].data_id=='1'){
                          openwindow(arrselections[0].data_url);
                      }else if(arrselections[0].data_id=='2'){
@@ -124,7 +124,7 @@
         })
 
         function openwindow(obj){
-            $("#selectTree").html(" <iframe frameborder = '0' border = '0'  src="+obj+"  scrolling='no' width=99% height=99% ></iframe>")
+            parent.$("#selectTree").html(" <iframe frameborder = '0' border = '0'  src="+obj+"  scrolling='no' width=99% height=99% ></iframe>")
         }
 
         //修改
@@ -160,31 +160,7 @@
         <button type="button" class="btn btn-primary glyphicon  glyphicon-option-horizontal" id="dataBtn">&nbsp;数据项</button>
         <button type="button" class="btn btn-inverse glyphicon glyphicon-export" id="exportBtn"   >&nbsp;导出Excel</button>
 
-
 </div>
     <table id="table"></table>
-
-<div class="modal fade in" id="_modalDialog" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
-    <div class="modal-dialog" role="document" style="width:1000px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                </button>
-                <h4 class="modal-title" id="modalLabel">详细数据项</h4></div>
-            <div id="_modalDialog_body" class="modal-body">
-                <!--  设置这个div的大小，超出部分显示滚动条 -->
-                <div id="selectTree" class="ztree" style="height:600px;overflow:auto; ">
-
-                </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 </body>
 </html>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.TheLogDao">
+
+    <insert id="add" parameterType="TheLogEntity">
+        INSERT INTO thelog  VALUES (#{thelog_id},#{thelog_contents},#{thelog_date},#{staffmember_id});
+    </insert>
+
+    <delete id="del"  parameterType="int">
+        DELETE  from  thelog  where  thelog_id=#{thelog_id}
+    </delete>
+
+    <update id="update" parameterType="TheLogEntity">
+        UPDATE  thelog SET thelog_contents=#{thelog_contents},staffmember_id=#{staffmember_id},thelog_date=#{thelog_date} where thelog_id=#{thelog_id}
+    </update>
+
+    <select id="selectAll"  resultType="TheLogEntity"  parameterType="Map">
+        SELECT * from  thelog
+        <if test="name != null  ">
+            where  thelog_contents like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="selectCount"  resultType="int"  parameterType="Map">
+        SELECT count(*) from   thelog
+        <if test="name != null ">
+            where  thelog_contents like ${name}
+        </if>
+            limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="Count"  resultType="int" >
+        SELECT count(*) from   thelog
+    </select>
+
+</mapper>

@@ -60,5 +60,10 @@ public class InterfaceJumpControler {
     public String  Commissiondata() throws Exception{
         return "commissiondata";
     }
+    //    跳转进入日志记录界面
+    @RequestMapping(value = "thelogJsp")
+    public String  Thelog() throws Exception{
+        return "thelog";
+    }
 
 }
