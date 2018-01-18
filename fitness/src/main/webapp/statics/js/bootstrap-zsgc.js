@@ -90,7 +90,6 @@ function add(){
         parent.toastr.warning('请完成当前操作', '温馨提示',messageOpts);
     }
 }
-
 //修改
 function update(){
 
@@ -142,7 +141,8 @@ function update(){
                     $(columns).prop(columnName,_edit_type_options_value)
                 }
                 else if(_edit_type=="combogrid"){
-                    var combogrid_content_start='<div class="input-group"><input id="'+column.field+'" type="text" class="form-control" aria-label="..."> <div class="input-group-btn" id="div_'+column.field+'"> <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&nbsp; <span class="caret"></span></button></div></div>';
+                    var idf = column.edit.idField;
+                    var combogrid_content_start='<div class="input-group" ><input id="'+column.field+'" type="text" class="form-control" aria-label="..."> <div class="input-group-btn" id="div_'+column.field+'"> <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&nbsp; <span class="caret"></span></button></div></div>';
                     $(columns).prop(columnName,combogrid_content_start);
                     var _edit_utl=_edit.url;
                     var _edit_columns=_edit.columns;
@@ -159,12 +159,18 @@ function update(){
                         dataType:'JSON',
                         success:function(data){
                             $.each(data,function(index,obj){
-                                _combogrid_table_context+='<tr>';
+                                var id_field = eval("obj."+idf);
+                                // +columnName+
+                                _combogrid_table_context+='<tr  onclick=\"getval('+id_field+','+"'"+columnName+"'"+')\">';
                                 $.each(_edit_columns,function(c,_edit_column){
                                     $.each(_edit_column,function(index,content){
                                         $.each(obj,function(name_space,value){
                                             if(content.field==name_space) {
-                                                _combogrid_table_context += '<td>' + value + "</td>";
+                                                if(idf==name_space){
+                                                    _combogrid_table_context += '<td>' + value + "</td>";
+                                                }else{
+                                                    _combogrid_table_context += '<td  id=\"td_name_'+id_field+'\">' + value + "</td>";
+                                                }
                                             }
                                         });
                                     });
@@ -188,6 +194,10 @@ function update(){
     state="update";
 }
 
+function getval(id,text_name){
+    var value = $("#td_name_"+id ).html()
+    $("#"+text_name).val(value);
+}
 
 function save(){
     //取消禁用
@@ -236,7 +246,6 @@ function cancel() {
         state="";
     }
 }
-
 
 function  del(url,arrselections,numberId){
     if(!f){

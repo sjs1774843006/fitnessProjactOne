@@ -67,7 +67,34 @@
                     edit:{
                         type:'text'
                     }
-                }],
+                }, {
+                    field: 'loginflag',
+                    title: '是否允许登录系统',
+                    align:'center',
+                    sortable:'true',
+                    edit:{
+                        type:'text'
+                    }
+                }, {
+                    field: 'juris_id',
+                    title: '拥有权限',
+                    align:'center',
+                    sortable:'true',
+                    edit:{
+                        type:'combogrid',
+                        idField:'module_id',
+                        url:'queryModulelist.do',
+                        columns : [ [ {
+                            title : "员工编号",
+                            field : "module_id",
+
+                        },{
+                            title : "员工名称",
+                            field : "module_name",
+                        }]]
+                    }
+                }
+                ],
 
             })
 
@@ -138,5 +165,6 @@
 
 </div>
     <table id="table"></table>
+
 </body>
 </html>

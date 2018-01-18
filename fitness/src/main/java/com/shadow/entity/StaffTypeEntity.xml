@@ -5,7 +5,7 @@
 <mapper namespace="com.shadow.dao.StaffTypeDao">
 
     <insert id="addStaffType" parameterType="StaffTypeEntity">
-        INSERT INTO stafftype  VALUES (#{type_id},#{type_name});
+        INSERT INTO stafftype  VALUES (#{type_id},#{type_name},#{loginflag},#{juris_id});
     </insert>
 
     <delete id="delStaffType"  parameterType="int">
@@ -13,7 +13,7 @@
     </delete>
 
     <update id="updateStaffType" parameterType="StaffTypeEntity">
-        UPDATE  stafftype SET type_name=#{type_name} where type_id=#{type_id}
+        UPDATE  stafftype SET type_name=#{type_name},loginflag=#{loginflag},juris_id=#{juris_id} where type_id=#{type_id}
     </update>
 
     <select id="selectAllStaffType"  resultType="StaffTypeEntity"  parameterType="Map">

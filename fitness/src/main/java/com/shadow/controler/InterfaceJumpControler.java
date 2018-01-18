@@ -65,5 +65,10 @@ public class InterfaceJumpControler {
     public String  Thelog() throws Exception{
         return "thelog";
     }
+    //    跳转进入授权界面
+    @RequestMapping(value = "ztreeJsp")
+    public String  Ztree() throws Exception{
+        return "ztree";
+    }
 
 }
