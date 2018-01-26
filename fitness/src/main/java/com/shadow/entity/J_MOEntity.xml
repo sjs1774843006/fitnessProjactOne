@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.J_MODao">
+
+    <insert id="addJ_MO" parameterType="J_MOEntity">
+        INSERT INTO j_mo  VALUES (#{j_id},#{m_id},#{o_id});
+    </insert>
+
+    <delete id="delJ_MO"  parameterType="int">
+        delete from j_mo where j_id=#{j_id}
+    </delete>
+
+    <select id="JurisdictionList" resultType="com.shadow.dto.M_ODtoEntity" parameterType="int">
+       select b.m_id,b.o_id from stafftype a JOIN j_mo b ON a.type_id = b.j_id WHERE a.type_id=#{type_id}
+    </select>
+
+    <select id="ListCount" resultType="int" >
+       select count(*) from  j_mo
+    </select>
+
+    <select id="getButton" resultType="ButtonEntity" parameterType="int">
+          select * from module_button  where button_id=#{button_id}
+    </select>
+
+
+
+</mapper>

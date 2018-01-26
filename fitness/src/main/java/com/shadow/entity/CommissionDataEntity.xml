@@ -13,7 +13,7 @@
     </delete>
 
     <update id="update" parameterType="CommissionDataEntity">
-        UPDATE  commission_data SET Commission_data=#{Commission_data} where Commission_data_id=#{Commission_data_id}
+        UPDATE  commission_data SET Commission_data=#{Commission_data}  where Commission_data_id=#{Commission_data_id}
     </update>
 
     <select id="selectAll"  resultType="CommissionDataEntity"  parameterType="Map">
@@ -29,11 +29,10 @@
         <if test="name != null ">
             where  Commission_data like ${name}
         </if>
-            limit ${pageindex},${pagesize}
     </select>
 
     <select id="Count"  resultType="int" >
-        SELECT count(*) from   commission_data
+        SELECT MAX (Commission_data_id) from   commission_data
     </select>
 
 </mapper>

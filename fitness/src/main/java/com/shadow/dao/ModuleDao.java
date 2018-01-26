@@ -7,5 +7,7 @@ import java.util.List;
 public interface ModuleDao {
 
     List<ModuleEntity>  selectAll();
+    List<ModuleEntity>  selectOneAll(int id);
+    int  selectCount(int id);
 
 }

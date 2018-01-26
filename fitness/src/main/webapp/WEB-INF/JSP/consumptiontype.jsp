@@ -6,15 +6,19 @@
     <title>Title</title>
     <link rel="stylesheet" href="/statics/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/statics/css/toastr.min.css">
+    <link rel="stylesheet" href="/statics/css/datetimepicker.css">
     <link rel="stylesheet" href="/statics/bootstrap-table/dist/bootstrap-table.min.css">
     <script src="/statics/js/jquery.min.js"></script>
     <script src="/statics/bootstrap/js/bootstrap.min.js"></script>
     <script src="/statics/bootstrap-table/dist/bootstrap-table.js"></script>
+    <script src="/statics/js/bootstrap-datetimepicker.js"></script>
+    <script src="/statics/js/bootstrap-datetimepicker.zh-CN.js"></script>
     <script src="/statics/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js"></script>
-    <script src="/statics/js/toastr.js"></script>
     <script src="/statics/js/tableExport.min.js"></script>
+    <script src="/statics/js/toastr.js"></script>
     <script src="/statics/js/toastr-min.js"></script>
-    <script src="/statics/js/bootstrap-zsgc.js"></script>
+    <script src="/statics/js/toastr-defined.js"></script>
+    <script src="/statics/js/bootstrap-crud.js"></script>
 
 
 
@@ -28,6 +32,7 @@
                 sortable: false,//设置为false 将禁止所有列的排序
                 sortOrder: "asc",//定义排序方式 'asc' 或者 'desc'
                 pageSize: 10,
+                height:850,
                 pageList: [10, 25, 50, 100],
                 queryParams:function(params){
 //                    var subcompany = $('#subcompany option:selected').val();

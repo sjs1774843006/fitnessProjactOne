@@ -29,11 +29,10 @@
         <if test="name != null ">
             where  Thecoach_type like ${name}
         </if>
-            limit ${pageindex},${pagesize}
     </select>
 
     <select id="Count"  resultType="int" >
-        SELECT count(*) from   thecoach_type
+        SELECT MAX (Thecoach_type_id) from   thecoach_type
     </select>
 
 </mapper>

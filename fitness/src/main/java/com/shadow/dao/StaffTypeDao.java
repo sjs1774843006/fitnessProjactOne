@@ -1,6 +1,5 @@
 package com.shadow.dao;
 
-import com.shadow.entity.DataDictionaryEntity;
 import com.shadow.entity.StaffTypeEntity;
 
 import java.util.List;
@@ -16,8 +15,23 @@ public interface StaffTypeDao {
 
     List<StaffTypeEntity> selectAllStaffType(Map<String, Object> map);
 
+    List<StaffTypeEntity> selectAllJurisdictionVo();
+
     int  selectCountStaffType(Map<String, Object> map);
 
     int  CountStaffType();
+
+
+    //登录系统验证
+    List<StaffTypeEntity> selectloginjurisdiction(Map<String, Object> map);
+
+    List<StaffTypeEntity> selectstafftype(int staff_id);
+
+    void  addStaff_Type(Map<String, Object> map);
+
+    void  delStaff_Type(int id);
+
+    void  deljmo_staff(int id);
+
 
 }

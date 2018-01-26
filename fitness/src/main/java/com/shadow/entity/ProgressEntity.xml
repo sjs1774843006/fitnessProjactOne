@@ -29,11 +29,10 @@
         <if test="name != null ">
             where  progress like ${name}
         </if>
-            limit ${pageindex},${pagesize}
     </select>
 
     <select id="Count"  resultType="int" >
-        SELECT count(*) from   progress
+        SELECT MAX (progress_id) from   progress
     </select>
 
 </mapper>

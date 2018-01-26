@@ -6,15 +6,19 @@
     <title>Title</title>
     <link rel="stylesheet" href="/statics/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/statics/css/toastr.min.css">
+    <link rel="stylesheet" href="/statics/css/datetimepicker.css">
     <link rel="stylesheet" href="/statics/bootstrap-table/dist/bootstrap-table.min.css">
     <script src="/statics/js/jquery.min.js"></script>
     <script src="/statics/bootstrap/js/bootstrap.min.js"></script>
     <script src="/statics/bootstrap-table/dist/bootstrap-table.js"></script>
+    <script src="/statics/js/bootstrap-datetimepicker.js"></script>
+    <script src="/statics/js/bootstrap-datetimepicker.zh-CN.js"></script>
     <script src="/statics/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js"></script>
-    <script src="/statics/js/toastr.js"></script>
     <script src="/statics/js/tableExport.min.js"></script>
+    <script src="/statics/js/toastr.js"></script>
     <script src="/statics/js/toastr-min.js"></script>
-    <script src="/statics/js/bootstrap-zsgc.js"></script>
+    <script src="/statics/js/toastr-defined.js"></script>
+    <script src="/statics/js/bootstrap-crud.js"></script>
 
 
 
@@ -28,6 +32,7 @@
                 sortable: false,//设置为false 将禁止所有列的排序
                 sortOrder: "asc",//定义排序方式 'asc' 或者 'desc'
                 pageSize: 10,
+                height:850,
                 pageList: [10, 25, 50, 100],
                 queryParams:function(params){
                     var subcompany = $('#subcompany option:selected').val();
@@ -102,8 +107,11 @@
                      if (arrselections.length <= 0) {
                          parent.toastr.warning('请选择需要查看的数据项', '温馨提示', messageOpts);
                          return;
+                     }if(arrselections.length > 1){
+                         parent.toastr.warning('选择查看的数据项过多', '温馨提示', messageOpts);
+                         return;
                      }
-                         parent.$('#_modalDialog').modal('show');
+                         $('#_modalDialog').modal('show');
                      if(arrselections[0].data_id=='1'){
                          openwindow(arrselections[0].data_url);
                      }else if(arrselections[0].data_id=='2'){
@@ -124,7 +132,7 @@
         })
 
         function openwindow(obj){
-            parent.$("#selectTree").html(" <iframe frameborder = '0' border = '0'  src="+obj+"  scrolling='no' width=99% height=99% ></iframe>")
+            $("#selectTree").html(" <iframe frameborder = '0' border = '0'  src="+obj+"  scrolling='no' width=99% height=99% ></iframe>")
         }
 
         //修改
@@ -162,5 +170,28 @@
 
 </div>
     <table id="table"></table>
+
+<%--弹出框开始--%>
+<div class="modal fade in" id="_modalDialog" tabindex="-1" role="dialog" aria-labelledby="modalLabel">
+    <div class="modal-dialog" role="document" style="width:100%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="modalLabel">详细数据项</h4></div>
+            <div id="_modalDialog_body" class="modal-body">
+                <!--  设置这个div的大小，超出部分显示滚动条 -->
+                <div id="selectTree" class="ztree" style="height:800px;overflow:auto; ">
+
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div><%--弹出框结束--%>
+
 </body>
 </html>

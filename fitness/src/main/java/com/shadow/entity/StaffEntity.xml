@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.StaffDao">
+
+    <delete id="staff_Del"  parameterType="int" >
+        DELETE  FROM Staff where staff_id=#{staff_id}
+    </delete>
+
+    <insert id="staff_Add"  parameterType="StaffEntity" >
+       INSERT INTO Staff  VALUES(#{staff_name},#{staff_password},#{staff_sex},#{staff_age},#{staff_tel},#{staff_address},#{staff_idcard},#{headportrait})
+    </insert>
+
+    <update id="staff_Upd"  parameterType="StaffEntity" >
+       UPDATE Staff SET staff_name=#{staff_name},staff_password=#{staff_password},staff_sex=#{staff_sex},staff_age=#{staff_age},staff_tel=#{staff_tel},staff_address=#{staff_address},staff_idcard=#{staff_idcard},headportrait=#{headportrait} WHERE staff_id=#{staff_id}
+    </update>
+
+    <select id="staff_All"  resultType="StaffEntity"  parameterType="Map">
+        SELECT * from  Staff
+        <if test="name != null  ">
+            where  staff_name like ${name}
+        </if>
+        limit ${pageindex},${pagesize}
+    </select>
+
+    <select id="selectCount"  resultType="int"  parameterType="Map">
+        SELECT count(*) from   Staff
+        <if test="name != null ">
+            where  staff_name like ${name}
+        </if>
+    </select>
+
+    <select id="Count"  resultType="int" >
+        SELECT MAX (staff_id) from   Staff
+    </select>
+
+    <select id="selectOne"  resultType="StaffEntity"  parameterType="Map" >
+        SELECT  *  from   Staff  where   staff_name=#{staff_name}  and  staff_password=#{staff_password}
+    </select>
+
+    <!--用户权限-->
+    <select id="staff_id_type" resultType="com.shadow.dto.staff_typeJurEntity" parameterType="int">
+      select a.staff_id,b.type_id from  staff a
+         JOIN staff_typemanytomany  b
+        on a.staff_id = b.staff_id
+        where  a.staff_id=#{staff_id}
+    </select>
+
+
+</mapper>

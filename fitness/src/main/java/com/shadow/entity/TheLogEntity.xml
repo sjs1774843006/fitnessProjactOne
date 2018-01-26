@@ -33,7 +33,7 @@
     </select>
 
     <select id="Count"  resultType="int" >
-        SELECT count(*) from   thelog
+        SELECT MAX (thelog_id) from   thelog
     </select>
 
 </mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shadow.dao.JMOStaffDao">
+
+    <insert id="addJ_MO" parameterType="J_MOEntity">
+        INSERT INTO jmo_staff  VALUES (#{j_id},#{m_id},#{o_id});
+    </insert>
+
+    <delete id="delJ_MO"  parameterType="int">
+        delete from jmo_staff where j_id=#{j_id}
+    </delete>
+
+    <delete id="delJ_MO_mid"  parameterType="int">
+        delete from jmo_staff where m_id=#{m_id} and  o_id=#{o_id}
+    </delete>
+
+
+    <select id="JurisdictionList" resultType="com.shadow.dto.M_ODtoEntity" parameterType="int">
+       select b.m_id,b.o_id from stafftype a JOIN jmo_staff b ON a.type_id = b.j_id WHERE a.type_id=#{type_id}
+    </select>
+
+    <select id="delList" resultType="com.shadow.dto.M_ODtoEntity" parameterType="int">
+        select b.m_id,b.o_id from  staff_typemanytomany a LEFT JOIN  j_mo  b on b.j_id=a.type_id  where a.staff_id=#{staff_id}
+    </select>
+
+    <select id="ListCount" resultType="int" >
+       select MAX (j_id) from  jmo_staff
+    </select>
+
+    <select id="getButton" resultType="ButtonEntity" parameterType="int">
+          select * from module_button  where button_id=#{button_id}
+    </select>
+
+
+
+</mapper>

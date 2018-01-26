@@ -110,5 +110,51 @@ public class StaffTypeControler {
         }
     }
 
+    //    用户授角表的数据增加
+    @RequestMapping(value = "addStaff_Type")
+    public void  add(@RequestParam(value = "staff_id")int staff_id,@RequestParam( value = "type_id") int type_id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
+        Map<String,Object>  map = new HashMap<String,Object>();
+        map.put("staff_id",staff_id);
+        map.put("type_id",type_id);
+        boolean flag = false;
+        try {
+            //删除用户对应的角色
+            staffTypeDao.delStaff_Type(staff_id);
+            //重新保存
+            staffTypeDao.addStaff_Type(map);
+
+        } catch (Exception e) {
+            flag = true;
+        }finally {
+            response.setCharacterEncoding("utf-8");
+            if(flag){ //定义boolean flag = false;   不发生改变就为false
+                response.getWriter().write("{\"success\":\"defeated\"}");
+            }else{
+                response.getWriter().write("{\"success\":\"success\"}");
+            }
+        }
+    }
+    @RequestMapping(value = "delStaff_Type")
+    public void  deleteType(@RequestParam(value = "staff_id")int staff_id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
+        boolean flag = false;
+        try {
+                //删除用户角色表
+                staffTypeDao.delStaff_Type(staff_id);
+                //删除一个用户单独的权限
+                staffTypeDao.deljmo_staff(staff_id);
+        }catch (Exception e) {
+            flag = true;
+        }finally{
+            response.setCharacterEncoding("utf-8");
+            if(flag){ //定义boolean flag = false;   不发生改变就为false
+                response.getWriter().write("{\"success\":\"defeated\"}");
+            }else{
+                response.getWriter().write("{\"success\":\"success\"}");
+            }
+        }
+
+    }
+
+
 
 }

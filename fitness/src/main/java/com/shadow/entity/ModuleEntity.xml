@@ -8,4 +8,12 @@
      SELECT * from  module
     </select>
 
+    <select id="selectOneAll"  resultType="com.shadow.entity.ModuleEntity"  parameterType="int">
+        SELECT * from  module  where module_pid=#{module_pid}
+    </select>
+
+    <select id="selectCount"  resultType="int"  parameterType="int">
+        SELECT count(*)  from  module  where module_pid=#{module_id}
+    </select>
+
 </mapper>

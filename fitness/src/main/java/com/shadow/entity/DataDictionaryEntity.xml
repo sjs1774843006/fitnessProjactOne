@@ -10,7 +10,7 @@
     </delete>
 
     <update id="update" parameterType="DataDictionaryEntity">
-        UPDATE  data_dictionary SET data_name=#{data_name},data_message=#{data_message} where data_id=#{data_id}
+        UPDATE  data_dictionary SET data_name=#{data_name},data_message=#{data_message},data_url=#{data_url} where data_id=#{data_id}
     </update>
 
 
@@ -27,7 +27,6 @@
         <if test="name != null ">
             where  data_name like ${name}
         </if>
-            limit ${pageindex},${pagesize}
     </select>
 
 </mapper>

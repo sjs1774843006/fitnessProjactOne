@@ -5,7 +5,7 @@
 <mapper namespace="com.shadow.dao.MemberCardTypeDao">
 
     <insert id="add" parameterType="MemberCardTypeEntity">
-        INSERT INTO member_card_type  VALUES (#{member_card_type_id},#{member_card_typename},#{site_id});
+        INSERT INTO member_card_type  VALUES (#{member_card_type_id},#{member_card_typename},#{site_id},#{member_launchdate});
     </insert>
 
     <delete id="del"  parameterType="int">
@@ -13,7 +13,7 @@
     </delete>
 
     <update id="update" parameterType="MemberCardTypeEntity">
-        UPDATE  member_card_type SET member_card_typename=#{member_card_typename},site_id=#{site_id} where member_card_type_id=#{member_card_type_id}
+        UPDATE  member_card_type SET member_card_typename=#{member_card_typename},site_id=#{site_id},member_launchdate=#{member_launchdate}  where member_card_type_id=#{member_card_type_id}
     </update>
 
     <select id="selectAll"  resultType="MemberCardTypeEntity"  parameterType="Map">
@@ -29,11 +29,10 @@
         <if test="name != null ">
             where  member_card_typename like ${name}
         </if>
-            limit ${pageindex},${pagesize}
     </select>
 
     <select id="Count"  resultType="int" >
-        SELECT count(*) from   member_card_type
+        SELECT MAX (member_card_type_id) from   member_card_type
     </select>
 
 </mapper>

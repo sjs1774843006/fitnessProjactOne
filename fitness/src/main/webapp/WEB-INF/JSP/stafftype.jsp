@@ -6,17 +6,19 @@
     <title>Title</title>
     <link rel="stylesheet" href="/statics/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/statics/css/toastr.min.css">
+    <link rel="stylesheet" href="/statics/css/datetimepicker.css">
     <link rel="stylesheet" href="/statics/bootstrap-table/dist/bootstrap-table.min.css">
     <script src="/statics/js/jquery.min.js"></script>
     <script src="/statics/bootstrap/js/bootstrap.min.js"></script>
     <script src="/statics/bootstrap-table/dist/bootstrap-table.js"></script>
+    <script src="/statics/js/bootstrap-datetimepicker.js"></script>
+    <script src="/statics/js/bootstrap-datetimepicker.zh-CN.js"></script>
     <script src="/statics/bootstrap-table/dist/locale/bootstrap-table-zh-CN.js"></script>
-    <script src="/statics/js/toastr.js"></script>
     <script src="/statics/js/tableExport.min.js"></script>
+    <script src="/statics/js/toastr.js"></script>
     <script src="/statics/js/toastr-min.js"></script>
-    <script src="/statics/js/bootstrap-zsgc.js"></script>
-
-
+    <script src="/statics/js/toastr-defined.js"></script>
+    <script src="/statics/js/bootstrap-crud.js"></script>
 
     <script>
         $(function(){
@@ -28,13 +30,12 @@
                 sortable: false,//设置为false 将禁止所有列的排序
                 sortOrder: "asc",//定义排序方式 'asc' 或者 'desc'
                 pageSize: 10,
+                height:850,
                 pageList: [10, 25, 50, 100],
                 queryParams:function(params){
-//                    var subcompany = $('#subcompany option:selected').val();
                     return {
                         offset: params.offset,
                         limit: params.limit,
-//                        companyId:subcompany,
                         searchText:params.search,
                     };
                 },
@@ -72,27 +73,28 @@
                     title: '是否允许登录系统',
                     align:'center',
                     sortable:'true',
-                    edit:{
-                        type:'text'
+                    edit : {
+                        type : 'checkbox',
+                        options:{
+                            true:'true',
+                            false:'false',
+                        }
                     }
-                }, {
-                    field: 'juris_id',
-                    title: '拥有权限',
-                    align:'center',
-                    sortable:'true',
-                    edit:{
-                        type:'combogrid',
-                        idField:'module_id',
-                        url:'queryModulelist.do',
-                        columns : [ [ {
-                            title : "员工编号",
-                            field : "module_id",
-
-                        },{
-                            title : "员工名称",
-                            field : "module_name",
-                        }]]
-                    }
+//                    edit:{
+//                        type:'combogrid',
+//                        idField:'module_id',//url中返回的ID
+//                        url:'queryModulelist.do',//url请求
+//                        columns : [ [
+//                            {
+//                            title : "员工编号",
+//                            field : "module_id",
+//
+//                        },{
+//                            title : "员工名称",
+//                            field : "module_name",
+//                        }
+//                        ]]
+//                    }
                 }
                 ],
 
@@ -105,10 +107,16 @@
                     parent.toastr.warning('请选择需要删除的数据', '温馨提示',messageOpts);
                     return;
                 }
-                del("delStaffType.do",arrselections,arrselections[0].type_id);
+                del("delStaffType.do",arrselections,"type_id");
             });
 
+
+
+
         })
+
+
+
 
         //增加
         function save_add(datass){
@@ -161,7 +169,6 @@
         <button type="button" class="btn btn-warning glyphicon  glyphicon-remove"        id="cancelBtn" >&nbsp;取&nbsp;消</button>
         <button type="button" class="btn btn-success glyphicon  glyphicon-floppy-disk"   id="saveBtn"   >&nbsp;保&nbsp;存</button>
         <button type="button" class="btn btn-inverse glyphicon  glyphicon-export"        id="exportBtn" >&nbsp;导出Excel</button>
-
 
 </div>
     <table id="table"></table>

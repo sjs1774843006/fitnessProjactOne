@@ -5,7 +5,7 @@
 <mapper namespace="com.shadow.dao.StaffTypeDao">
 
     <insert id="addStaffType" parameterType="StaffTypeEntity">
-        INSERT INTO stafftype  VALUES (#{type_id},#{type_name},#{loginflag},#{juris_id});
+        INSERT INTO stafftype(type_id,type_name,loginflag)  VALUES (#{type_id},#{type_name},#{loginflag});
     </insert>
 
     <delete id="delStaffType"  parameterType="int">
@@ -13,7 +13,7 @@
     </delete>
 
     <update id="updateStaffType" parameterType="StaffTypeEntity">
-        UPDATE  stafftype SET type_name=#{type_name},loginflag=#{loginflag},juris_id=#{juris_id} where type_id=#{type_id}
+        UPDATE  stafftype SET type_name=#{type_name},loginflag=#{loginflag} where type_id=#{type_id}
     </update>
 
     <select id="selectAllStaffType"  resultType="StaffTypeEntity"  parameterType="Map">
@@ -24,16 +24,56 @@
             limit ${pageindex},${pagesize}
     </select>
 
+    <select id="selectAllJurisdictionVo"  resultType="StaffTypeEntity" >
+        SELECT *  from  stafftype
+    </select>
+
     <select id="selectCountStaffType"  resultType="int"  parameterType="Map">
         SELECT count(*) from   stafftype
         <if test="name != null ">
             where  type_name like ${name}
         </if>
-            limit ${pageindex},${pagesize}
     </select>
 
     <select id="CountStaffType"  resultType="int" >
-        SELECT count(*) from   stafftype
+        SELECT max(type_id) from   stafftype
     </select>
+
+
+    <!--登录开始验证-->
+
+    <select id="selectloginjurisdiction"  resultType="StaffTypeEntity" parameterType="Map">
+          select * from stafftype
+            where type_id in(
+                select type_id from staff_typemanytomany where staff_id in(
+                        select stafftype_id from  staff  where staff_name=#{staff_name} and staff_password=#{staff_password}
+                    )
+            )
+
+    </select>
+
+    <select id="selectstafftype"  resultType="StaffTypeEntity" parameterType="int">
+
+      select * from stafftype  where type_id in (SELECT type_id  from  staff_typemanytomany  where staff_id in( SELECT staff_id  from  staff where  staff_id = #{staff_id} ))
+
+    </select>
+
+    <insert id="addStaff_Type" parameterType="Map">
+        INSERT INTO staff_typemanytomany  VALUES (#{staff_id},#{type_id});
+    </insert>
+
+    <delete id="delStaff_Type"  parameterType="int">
+        DELETE  from  staff_typemanytomany  where  staff_id=#{staff_id}
+    </delete>
+
+    <delete id="deljmo_staff"  parameterType="int">
+        DELETE  from  jmo_staff  where  j_id=#{j_id}
+    </delete>
+
+
+    <!--end-->
+
+
+
 
 </mapper>

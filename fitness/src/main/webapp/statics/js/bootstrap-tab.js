@@ -129,7 +129,7 @@ function  addTabs(moduletitle,moduId,moduleurl,optionsclose) {
         //固定TAB中IFRAME高度
         mainHeight = $(document.body).height();
         //创建新TAB的title
-        title = '<li role="presentation" id="tab_' + id + '"><a href="#' + id + '" aria-controls="' + id + '" role="tab" data-toggle="tab">' + moduletitle +"-------"+id;
+        title = '<li role="presentation" id="tab_' + id + '"><a href="#' + id + '" aria-controls="' + id + '" role="tab" data-toggle="tab">' + moduletitle;
 
         list.push(id);
 

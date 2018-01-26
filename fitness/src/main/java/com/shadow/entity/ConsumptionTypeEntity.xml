@@ -29,11 +29,10 @@
         <if test="name != null ">
             where  consumption_typename like ${name}
         </if>
-            limit ${pageindex},${pagesize}
     </select>
 
     <select id="Count"  resultType="int" >
-        SELECT count(*) from   consumption_type
+        SELECT MAX (consumption_type_id) from   consumption_type
     </select>
 
 </mapper>
