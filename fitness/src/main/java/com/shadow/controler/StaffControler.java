@@ -61,36 +61,12 @@ public class StaffControler {
         Map<Integer,List<Integer>> jmap = getJurisdiction(jid);
         if(jmap!=null){
             List<ModuleEntity> list=moduleDao.selectAll();
+
             if(list.size()!=0&&list!=null){
                 J_ZtreeEntity entity;
                 for (ModuleEntity moduleEntity : list) {
                     List<ButtonEntity> blist = buttonDao.getButton(moduleEntity.getModule_id());
                     entity = new J_ZtreeEntity();
-                    if(moduleEntity.getModule_id()==0){
-                        entity.setId(moduleEntity.getModule_id());
-                        entity.setModule(moduleEntity.getModule_name());
-                    }
-                    else{
-                        if(blist!=null&&blist.size()!=0){
-                            for (ButtonEntity buttonEntity : blist) {
-                                if(buttonEntity.getButton_name()==1){
-                                    entity.setAdd("2");
-                                }
-                                else if(buttonEntity.getButton_name()==2){
-                                    entity.setDel("2");
-                                }
-                                else if(buttonEntity.getButton_name()==3){
-                                    entity.setUpdate("2");
-                                }
-                                else if(buttonEntity.getButton_name()==4){
-                                    entity.setQuery("2");
-                                }
-                            }
-                        }
-                        else{
-                            entity.setId(moduleEntity.getModule_id());
-                            entity.setModule(moduleEntity.getModule_name());
-                        }
                         if(moduleEntity.getModule_pid()!=0){
                             entity.set__parentId(moduleEntity.getModule_pid());
                         }
@@ -98,7 +74,6 @@ public class StaffControler {
                         entity.setModule(moduleEntity.getModule_name());
                         int  s=1;
                         for (Integer key : jmap.keySet()) {
-
                             List<Integer> tempList = jmap.get(key);
                             for (Integer integer : tempList) {
                                 if(key==moduleEntity.getModule_id()){
@@ -120,7 +95,6 @@ public class StaffControler {
                                 }
                             }
                         }
-                    }
                     jlist.add(entity);
                 }
             }
