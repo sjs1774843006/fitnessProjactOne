@@ -6,7 +6,7 @@ public class StaffDtoEntity {
       private String staff_name;
       private String jurisdiction;
       private String staff_password;
-      private int staff_sex;
+      private String staff_sex;
       private int staff_age;
       private String staff_tel;
       private String staff_address;
@@ -43,7 +43,7 @@ public class StaffDtoEntity {
     public StaffDtoEntity() {
     }
 
-    public StaffDtoEntity(int staff_id, String staff_name, String jurisdiction, String staff_password, int staff_sex, int staff_age, String staff_tel, String staff_address, int stafftype_id, String staff_idcard, String headportrait) {
+    public StaffDtoEntity(int staff_id, String staff_name, String jurisdiction, String staff_password, String staff_sex, int staff_age, String staff_tel, String staff_address, int stafftype_id, String staff_idcard, String headportrait) {
         this.staff_id = staff_id;
         this.staff_name = staff_name;
         this.jurisdiction = jurisdiction;
@@ -89,11 +89,11 @@ public class StaffDtoEntity {
         this.staff_name = staff_name;
     }
 
-    public int getStaff_sex() {
+    public String getStaff_sex() {
         return staff_sex;
     }
 
-    public void setStaff_sex(int staff_sex) {
+    public void setStaff_sex(String staff_sex) {
         this.staff_sex = staff_sex;
     }
 

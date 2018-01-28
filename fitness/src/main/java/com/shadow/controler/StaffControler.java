@@ -220,8 +220,12 @@ public class StaffControler {
             }else{
                 staffDtoEntity.setJurisdiction("无角色");
             }
-            staffDtoEntity.setStaff_password(entity.getStaff_password());
-            staffDtoEntity.setStaff_sex(entity.getStaff_sex());
+            staffDtoEntity.setStaff_password("**********");
+            if(entity.getStaff_sex()==1){
+                staffDtoEntity.setStaff_sex("男");
+            }else{
+                staffDtoEntity.setStaff_sex("女");
+            }
             staffDtoEntity.setStaff_age(entity.getStaff_age());
             staffDtoEntity.setStaff_tel(entity.getStaff_tel());
             staffDtoEntity.setStaff_address(entity.getStaff_address());
@@ -246,7 +250,7 @@ public class StaffControler {
         try {
             HttpSession session = request.getSession();
             StaffEntity staff = (StaffEntity) session.getAttribute("staff");
-            if(staff.getStaff_id()==1&staff.getStaff_name()=="admin"){
+            if("admin".equals(staff.getStaff_name())){
                 StaffEntity staffEntity = staffDao.staff_One(id);
                 InterfaceJumpControler.theLogAdd(request,theLogDao,"Staff","删除了《"+staffEntity.toString()+"这条数据");
                 staffDao.staff_Del(id);
@@ -255,7 +259,7 @@ public class StaffControler {
                     StaffEntity staffEntity = staffDao.staff_One(id);
                     InterfaceJumpControler.theLogAdd(request,theLogDao,"Staff","删除了《"+staffEntity.toString()+"这条数据");
                     staffDao.staff_Del(id);
-                } else {
+                }else{
                     flag_staff = true;
                 }
             }
@@ -284,12 +288,13 @@ public class StaffControler {
         try {
             HttpSession session = request.getSession();
             StaffEntity staff = (StaffEntity) session.getAttribute("staff");
-            if(staff.getStaff_id()==1&staff.getStaff_name()=="admin"){
+            if("admin".equals(staff.getStaff_name())){
                 StaffEntity entity = staffDao.staff_One(staffEntity.getStaff_id());
                 InterfaceJumpControler.theLogAdd(request,theLogDao,"staff","修改了数据，原数据为：《 "+entity.toString()+" 》");
                 String password = MD5_password(staffEntity.getStaff_password());
                 staffEntity.setStaff_password(password);
                 staffDao.staff_Upd(staffEntity);
+
             }else {
                 if (staff.getStaff_id() == staffEntity.getStaff_id()) {
                     StaffEntity entity = staffDao.staff_One(staffEntity.getStaff_id());
@@ -297,7 +302,7 @@ public class StaffControler {
                     String password = MD5_password(staffEntity.getStaff_password());
                     staffEntity.setStaff_password(password);
                     staffDao.staff_Upd(staffEntity);
-                } else {
+                }else{
                     flag_staff = true;
                 }
             }

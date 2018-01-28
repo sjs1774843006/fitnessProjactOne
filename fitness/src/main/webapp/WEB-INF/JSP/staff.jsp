@@ -96,8 +96,12 @@
                     title: '员工性别',
                     align:'center',
                     sortable:'true',
-                    edit:{
-                        type:'text'
+                    edit : {
+                        type : 'checkbox',
+                        options:{
+                            1:'男',
+                            2:'女',
+                        }
                     }
                 }, {
                     field: 'staff_age',
