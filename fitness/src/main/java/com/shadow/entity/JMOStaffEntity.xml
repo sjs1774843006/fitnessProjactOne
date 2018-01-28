@@ -26,7 +26,7 @@
     </select>
 
     <select id="ListCount" resultType="int" >
-       select MAX (j_id) from  jmo_staff
+       select MAX(j_id) from  jmo_staff
     </select>
 
     <select id="getButton" resultType="ButtonEntity" parameterType="int">

@@ -3,22 +3,23 @@ package com.shadow.controler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.shadow.dao.ButtonDao;
-import com.shadow.dao.J_MODao;
-import com.shadow.dao.ModuleDao;
-import com.shadow.dao.StaffTypeDao;
+import com.shadow.dao.*;
 import com.shadow.dto.J_MZtree;
 import com.shadow.dto.J_ZtreeEntity;
 import com.shadow.dto.M_ODtoEntity;
+import com.shadow.dto.staff_typeJurEntity;
 import com.shadow.entity.ButtonEntity;
 import com.shadow.entity.J_MOEntity;
 import com.shadow.entity.ModuleEntity;
+import com.shadow.entity.StaffEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +41,13 @@ public class J_MOControler {
     @Resource
     private StaffTypeDao staffTypeDao;
 
+    @Resource
+    private StaffDao staffDao;
+
+    @Resource
+    private TheLogDao theLogDao;
+
+
     private J_MOEntity jmoAdd = null;
     private J_MOEntity jmoUpdate = null;
     private J_MOEntity jmoDel = null;
@@ -50,6 +58,9 @@ public class J_MOControler {
     //查询
     @RequestMapping(value = "jurisdiction_data")
     public void jurisdiction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"权限","进行了查询及分页");
+
         String  jid= request.getParameter("jid");
         Map<String, Object> map = new HashMap<String, Object>();
         List<J_ZtreeEntity> jlist = new ArrayList<J_ZtreeEntity>();
@@ -144,12 +155,12 @@ public class J_MOControler {
 
     //增加
     @RequestMapping(value="save_jurisdiction")
-    public void save(HttpServletRequest  request,HttpServletResponse response) throws IOException{
-        String jid = request.getParameter("jid");
+    public void save(@RequestParam(value = "jid") int jid, HttpServletRequest  request, HttpServletResponse response) throws IOException{
         String content = request.getParameter("content");
-        j_moDao.delJ_MO(Integer.parseInt(jid));
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"权限","进行了修改");
+        j_moDao.delJ_MO(jid);
         List<J_MZtree> list = JSONObject.parseArray(content, J_MZtree.class);
-        String ReturnStr = addJurisdiction(list,Integer.parseInt(jid));
+        String ReturnStr = addJurisdiction(list,jid);
         response.setCharacterEncoding("utf-8");
         if(ReturnStr.equals("success")){
             response.getWriter().write("success");
@@ -212,4 +223,48 @@ public class J_MOControler {
             j_moDao.addJ_MO(jmoQuery);
         }
     }
+
+    @RequestMapping(value="controlbutton")
+    public void controlbutton(@RequestParam(value = "m_id")int m_id,HttpServletRequest  request,HttpServletResponse response) throws IOException{
+        HttpSession session = request.getSession();
+        StaffEntity  staff = (StaffEntity) session.getAttribute("staff");
+        List<staff_typeJurEntity>  staffdetype = staffDao.staff_id_type(staff.getStaff_id());
+        String strJson ="[";
+        for (staff_typeJurEntity integer : staffdetype) {
+            List<M_ODtoEntity> j_mo_btn = staffDao.j_mo_btn(integer.getType_id(),m_id);
+            if(j_mo_btn.size()>0){
+                for (M_ODtoEntity integer1 : j_mo_btn) {
+                    if(1==integer1.getO_id()){
+                        strJson +="{\"text\":\"add\"},";
+                    }else if(2==integer1.getO_id()){
+                        strJson +="{\"text\":\"del\"},";
+                    }else if(3==integer1.getO_id()){
+                        strJson +="{\"text\":\"update\"},";
+                    }else if(4==integer1.getO_id()){
+                        strJson +="{\"text\":\"all\"},{\"staff\":\""+staff.getStaff_name()+"\"}";
+                    }
+                }
+            }
+        }
+        List<M_ODtoEntity> jmo_staff_btn = staffDao.jmo_staff_btn(staff.getStaff_id(),m_id);
+          if(jmo_staff_btn.size()>0){
+              for (M_ODtoEntity m_oDtoEntity : jmo_staff_btn) {
+                  if(1==m_oDtoEntity.getO_id()){
+                      strJson +="{\"text\":\"add\"},";
+                  }else if(2==m_oDtoEntity.getO_id()){
+                      strJson +="{\"text\":\"del\"},";
+                  }else if(3==m_oDtoEntity.getO_id()){
+                      strJson +="{\"text\":\"update\"},";
+                  }else if(4==m_oDtoEntity.getO_id()){
+                      strJson +="{\"text\":\"all\"},{\"staff\":\""+staff.getStaff_name()+"\"}";
+                  }
+              }
+          }
+
+        strJson+="]";
+        response.setCharacterEncoding("utf-8");
+        response.getWriter().write(strJson);
+    }
+
+
 }

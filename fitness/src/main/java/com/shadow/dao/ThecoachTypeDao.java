@@ -16,6 +16,8 @@ public interface ThecoachTypeDao {
 
     List<ThecoachTypeEntity> selectAll(Map<String, Object> map);
 
+    ThecoachTypeEntity selectOne(int id);
+
     int  selectCount(Map<String, Object> map);
 
     int  Count();

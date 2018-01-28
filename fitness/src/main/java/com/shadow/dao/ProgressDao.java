@@ -16,6 +16,8 @@ public interface ProgressDao {
 
     List<ProgressEntity> selectAll(Map<String, Object> map);
 
+    ProgressEntity selectOne(int id);
+
     int  selectCount(Map<String, Object> map);
 
     int  Count();

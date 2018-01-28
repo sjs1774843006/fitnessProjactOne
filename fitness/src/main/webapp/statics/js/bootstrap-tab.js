@@ -24,6 +24,7 @@ $(function() {
             iconClass: 'glyphicon glyphicon-remove-circle',
             name: '关闭所有',
             onClick: function() {
+                tabcount=0
                 for(var i=0;i<list.length;i++){
                     $("#tab_" + list[i]).remove();
                     $("#" + list[i]).remove();
@@ -60,55 +61,51 @@ function  callBack(data) {
     var     html ="";
     $.each(data,function(k,v){
         if(v.module_pid==0) {
-            html += "<li class=\"admin-parent\">";
-            html += "<a class=\"am-cf\" data-am-collapse=\"{target: '#collapse-nav" + v.module_id + "'}\">";
-            html += "<span class=\"am-icon-th-list\"></span>";
-            html += v.module_name;
-            html += "<span class=\"am-icon-angle-right am-fr am-margin-right\"></span>";
-            html += "</a>";
-            html += "<ul class=\"am-list am-collapse admin-sidebar-sub \" id=\"collapse-nav" + v.module_id + "\">";
+            if(titles!=v.module_name){
+                titles=v.module_name;
+                html += "<li class=\"admin-parent\">";
+                html += "<a class=\"am-cf\" data-am-collapse=\"{target: '#collapse-nav" + v.module_id + "'}\">";
+                html += "<span class=\"am-icon-th-list\"></span>";
+                html += titles;
+                html += "<span class=\"am-icon-angle-right am-fr am-margin-right\"></span>";
+                html += "</a>";
+                html += "<ul class=\"am-list am-collapse admin-sidebar-sub \" id=\"collapse-nav" + v.module_id + "\">";
+                $.each(data,function(key,val){
+                    if(v.module_id==val.module_pid){
+                        if(val.module_parent==true){
+                            html += "<li class=\"admin-parent\">";
+                            html += "<a class=\"am-cf\" data-am-collapse=\"{target: '#collapse-nav" + val.module_id + "'}\">";
+                            html += "<span class=\"am-icon-\"></span>";
+                            html += val.module_name;
+                            html += "<span class=\"am-icon-angle-right am-fr am-margin-right\"></span>";
+                            html += "</a>";
+                            html += "<ul class=\"am-list am-collapse admin-sidebar-sub \" id=\"collapse-nav" + val.module_id + "\">";
+                            $.each(data,function(x,y){
+                                if(val.module_id==y.module_pid){
+                                    html += "<li  onclick=\"javascript:addTabs('"+y.module_name+"','"+y.module_id+"','"+y.module_jsp+"','true')\" ><a href=\"#\">";
+                                    html += "<span class=\"am-icon-list-alt\"></span>";
+                                    html +=y.module_name;
+                                    html +="</a>";
+                                    html +="</li>";
+                                }
+                            })
+                            html += "</ul>";
 
-            $.each(data,function(key,val){
-                if(v.module_id==val.module_pid){
-                    if(val.module_parent==true){
-                        html += "<li class=\"admin-parent\">";
-                        html += "<a class=\"am-cf\" data-am-collapse=\"{target: '#collapse-nav" + val.module_id + "'}\">";
-                        html += "<span class=\"am-icon-\"></span>";
-                        html += val.module_name;
-                        html += "<span class=\"am-icon-angle-right am-fr am-margin-right\"></span>";
-                        html += "</a>";
-                        html += "<ul class=\"am-list am-collapse admin-sidebar-sub \" id=\"collapse-nav" + val.module_id + "\">";
-                        $.each(data,function(x,y){
-                            if(val.module_id==y.module_pid){
-                                html += "<li  onclick=\"javascript:addTabs('"+y.module_name+"','"+y.module_id+"','"+y.module_jsp+"','true')\" ><a href=\"#\">";
-                                html += "<span class=\"am-icon-list-alt\"></span>";
-                                html +=y.module_name;
-                                html +="</a>";
-                                html +="</li>";
-                            }
-                        })
-                        html += "</ul>";
 
+                            html += "</li>";
+                        }else{
+                            html += "<li  onclick=\"javascript:addTabs('"+val.module_name+"','"+val.module_id+"','"+val.module_jsp+"','true')\" ><a href=\"#\">";
+                            html += "<span class=\"am-icon-list-alt\"></span>";
+                            html +=val.module_name;
+                            html +="</a>";
+                            html +="</li>";
 
-                        html += "</li>";
-                    }else{
-                        html += "<li  onclick=\"javascript:addTabs('"+val.module_name+"','"+val.module_id+"','"+val.module_jsp+"','true')\" ><a href=\"#\">";
-                        html += "<span class=\"am-icon-list-alt\"></span>";
-                        html +=val.module_name;
-                        html +="</a>";
-                        html +="</li>";
-
+                        }
                     }
-                }
-            })
-            html += "</ul>";
-            html += "</li>";
-        }else if(v.module_pid=="-1"){
-            html += "<li  onclick=\"javascript:addTabs('"+v.module_name+"','"+v.module_id+"','"+v.module_jsp+"','true')\" ><a href=\"#\">";
-            html += "<span class=\"am-icon-list-alt\"></span>";
-            html +=v.module_name;
-            html +="</a>";
-            html +="</li>";
+                })
+                html += "</ul>";
+                html += "</li>";
+            }
         }
     })
     $("#ztree").html(html);
@@ -116,6 +113,7 @@ function  callBack(data) {
 
 }
 
+var tabcount = 0;
 function  addTabs(moduletitle,moduId,moduleurl,optionsclose) {
     //可以在此处验证session
     id = "tab_" + moduId;
@@ -145,12 +143,14 @@ function  addTabs(moduletitle,moduId,moduleurl,optionsclose) {
             content = '<div role="tabpanel" class="tab-pane" id="' + id + '"><iframe id="iframe_'+id+'" src="' + moduleurl +
             '" width="100%" height="100%" onload="changeFrameHeight(this)" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" allowtransparency="yes"></iframe></div>';
        }
-       if($("#tt").html().length<=2300){
+       if(tabcount<=6){
            //加入TABS
            $(".nav-tabs").append(title);
            $(".tab-content").append(content);
+           tabcount++;
        }else{
            toastr.warning('打开界面已达上限', '温馨提示',message);
+           return;
        }
 
     }else{
@@ -180,6 +180,7 @@ var closeTab = function (id) {
         $("#tab_" + id).prev().addClass('active');
         $("#" + id).prev().addClass('active');
     }
+    tabcount--;
     //关闭TAB
     $("#tab_" + id).remove();
     $("#" + id).remove();

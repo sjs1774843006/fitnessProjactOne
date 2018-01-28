@@ -9,11 +9,42 @@
     </select>
 
     <select id="selectOneAll"  resultType="com.shadow.entity.ModuleEntity"  parameterType="int">
-        SELECT * from  module  where module_pid=#{module_pid}
+        SELECT * from  module  where module_id=#{module_pid}
     </select>
 
     <select id="selectCount"  resultType="int"  parameterType="int">
         SELECT count(*)  from  module  where module_pid=#{module_id}
     </select>
+
+
+    <select id="selectModuleJ_mo"  resultType="com.shadow.entity.ModuleEntity"  parameterType="int">
+        SELECT * FROM  module WHERE module_id IN (
+        SELECT  e.m_id  FROM  staff a
+        LEFT JOIN  staff_typemanytomany b
+        on a.staff_id = b.staff_id
+        LEFT JOIN stafftype c
+        on b.type_id = c.type_id
+        LEFT JOIN j_mo d
+        on d.j_id= c.type_id
+        LEFT JOIN jmo_staff e
+        on e.j_id = a.staff_id
+        WHERE a.staff_id = #{staff_id})
+    </select>
+
+    <select id="selectModuleJmo_staff"  resultType="com.shadow.entity.ModuleEntity"  parameterType="int">
+        SELECT *  FROM module WHERE module_id IN (
+        SELECT  d.m_id FROM  staff a
+        LEFT JOIN  staff_typemanytomany b
+        on a.staff_id = b.staff_id
+        LEFT JOIN stafftype c
+        on b.type_id = c.type_id
+        LEFT JOIN j_mo d
+        on d.j_id= c.type_id
+        LEFT JOIN jmo_staff e
+        on e.j_id = a.staff_id
+        WHERE a.staff_id = #{staff_id})
+    </select>
+
+
 
 </mapper>

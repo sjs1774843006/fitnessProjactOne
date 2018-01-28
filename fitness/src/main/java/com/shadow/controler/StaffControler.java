@@ -2,16 +2,13 @@ package com.shadow.controler;
 
 
 import com.alibaba.fastjson.JSON;
+import com.shadow.entity.*;
 import org.apache.commons.io.FileUtils;
 import com.shadow.dao.*;
 import com.shadow.dto.J_ZtreeEntity;
 import com.shadow.dto.M_ODtoEntity;
 import com.shadow.dto.StaffDtoEntity;
 import com.shadow.dto.staff_typeJurEntity;
-import com.shadow.entity.ButtonEntity;
-import com.shadow.entity.ModuleEntity;
-import com.shadow.entity.StaffEntity;
-import com.shadow.entity.StaffTypeEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -50,12 +48,17 @@ public class StaffControler {
     @Resource
     private J_MODao  j_moDao;
 
+    @Resource
+    private TheLogDao theLogDao;
+
+
     private List<M_ODtoEntity> object;
 
 
     //查询
     @RequestMapping(value = "staffjurisdiction")
     public void jurisdiction(@RequestParam(value = "jid")int jid,HttpServletRequest request, HttpServletResponse response) throws IOException {
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"用户权限","进行了查询及分页");
         Map<String, Object> map = new HashMap<String, Object>();
         List<J_ZtreeEntity> jlist = new ArrayList<J_ZtreeEntity>();
         Map<Integer,List<Integer>> jmap = getJurisdiction(jid);
@@ -67,12 +70,36 @@ public class StaffControler {
                 for (ModuleEntity moduleEntity : list) {
                     List<ButtonEntity> blist = buttonDao.getButton(moduleEntity.getModule_id());
                     entity = new J_ZtreeEntity();
+                    if(moduleEntity.getModule_id()==0){
+                        entity.setId(moduleEntity.getModule_id());
+                        entity.setModule(moduleEntity.getModule_name());
+                    }
+                    else{
+                        if(blist!=null&&blist.size()!=0){
+                            for (ButtonEntity buttonEntity : blist) {
+                                if(buttonEntity.getButton_name()==1){
+                                    entity.setAdd("2");
+                                }
+                                else if(buttonEntity.getButton_name()==2){
+                                    entity.setDel("2");
+                                }
+                                else if(buttonEntity.getButton_name()==3){
+                                    entity.setUpdate("2");
+                                }
+                                else if(buttonEntity.getButton_name()==4){
+                                    entity.setQuery("2");
+                                }
+                            }
+                        }
+                        else{
+                            entity.setId(moduleEntity.getModule_id());
+                            entity.setModule(moduleEntity.getModule_name());
+                        }
                         if(moduleEntity.getModule_pid()!=0){
                             entity.set__parentId(moduleEntity.getModule_pid());
                         }
                         entity.setId(moduleEntity.getModule_id());
                         entity.setModule(moduleEntity.getModule_name());
-                        int  s=1;
                         for (Integer key : jmap.keySet()) {
                             List<Integer> tempList = jmap.get(key);
                             for (Integer integer : tempList) {
@@ -95,6 +122,7 @@ public class StaffControler {
                                 }
                             }
                         }
+                    }
                     jlist.add(entity);
                 }
             }
@@ -108,6 +136,7 @@ public class StaffControler {
         }
 
     }
+
     public   Map<Integer, List<Integer>> getJurisdiction(int jid) {
         Map<Integer, List<Integer>> map = new HashMap<Integer, List<Integer>>();
         List<M_ODtoEntity> object =  new ArrayList<M_ODtoEntity>();
@@ -157,6 +186,7 @@ public class StaffControler {
     //    数据查询分页
     @RequestMapping(value = "queryStafflist")
     public void  query4List(HttpServletRequest request, HttpServletResponse  response) throws Exception{
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"Staff","查询及分页");
         Map<String,Object> querymap = new HashMap<String,Object>();
         String  pageindex = request.getParameter("offset");
         String  pagesize = request.getParameter("limit");
@@ -212,8 +242,23 @@ public class StaffControler {
     @RequestMapping(value = "delStaff")
     public void  delete(@RequestParam(value = "id")int id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
+        boolean flag_staff = false;
         try {
-            staffDao.staff_Del(id);
+            HttpSession session = request.getSession();
+            StaffEntity staff = (StaffEntity) session.getAttribute("staff");
+            if(staff.getStaff_id()==1&staff.getStaff_name()=="admin"){
+                StaffEntity staffEntity = staffDao.staff_One(id);
+                InterfaceJumpControler.theLogAdd(request,theLogDao,"Staff","删除了《"+staffEntity.toString()+"这条数据");
+                staffDao.staff_Del(id);
+            }else {
+                if (staff.getStaff_id() == id) {
+                    StaffEntity staffEntity = staffDao.staff_One(id);
+                    InterfaceJumpControler.theLogAdd(request,theLogDao,"Staff","删除了《"+staffEntity.toString()+"这条数据");
+                    staffDao.staff_Del(id);
+                } else {
+                    flag_staff = true;
+                }
+            }
         }catch (Exception e) {
             flag = true;
         }finally{
@@ -221,7 +266,11 @@ public class StaffControler {
             if(flag){ //定义boolean flag = false;   不发生改变就为false
                 response.getWriter().write("{\"success\":\"defeated\"}");
             }else{
-                response.getWriter().write("{\"success\":\"success\"}");
+                if(flag_staff){
+                    response.getWriter().write("{\"success\":\"insufficient\"}");
+                }else{
+                    response.getWriter().write("{\"success\":\"success\"}");
+                }
             }
         }
 
@@ -231,10 +280,27 @@ public class StaffControler {
     @RequestMapping(value = "updateStaff")
     public void  update(StaffEntity staffEntity, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
+        boolean flag_staff = false;
         try {
-            String password = MD5_password(staffEntity.getStaff_password());
-            staffEntity.setStaff_password(password);
-            staffDao.staff_Upd(staffEntity);
+            HttpSession session = request.getSession();
+            StaffEntity staff = (StaffEntity) session.getAttribute("staff");
+            if(staff.getStaff_id()==1&staff.getStaff_name()=="admin"){
+                StaffEntity entity = staffDao.staff_One(staffEntity.getStaff_id());
+                InterfaceJumpControler.theLogAdd(request,theLogDao,"staff","修改了数据，原数据为：《 "+entity.toString()+" 》");
+                String password = MD5_password(staffEntity.getStaff_password());
+                staffEntity.setStaff_password(password);
+                staffDao.staff_Upd(staffEntity);
+            }else {
+                if (staff.getStaff_id() == staffEntity.getStaff_id()) {
+                    StaffEntity entity = staffDao.staff_One(staffEntity.getStaff_id());
+                    InterfaceJumpControler.theLogAdd(request, theLogDao, "staff", "修改了数据，原数据为：《 " + entity.toString() + " 》");
+                    String password = MD5_password(staffEntity.getStaff_password());
+                    staffEntity.setStaff_password(password);
+                    staffDao.staff_Upd(staffEntity);
+                } else {
+                    flag_staff = true;
+                }
+            }
         } catch (Exception e) {
             flag = true;
         }finally {
@@ -242,7 +308,11 @@ public class StaffControler {
             if(flag){ //定义boolean flag = false;   不发生改变就为false
                 response.getWriter().write("{\"success\":\"defeated\"}");
             }else{
-                response.getWriter().write("{\"success\":\"success\"}");
+                if(flag_staff){
+                    response.getWriter().write("{\"success\":\"insufficient\"}");
+                }else{
+                    response.getWriter().write("{\"success\":\"success\"}");
+                }
             }
         }
     }
@@ -253,6 +323,8 @@ public class StaffControler {
             String path = request.getServletContext().getRealPath("upload");
             FileUtils.copyInputStreamToFile(file.getInputStream(),new File(path+"/"+file.getOriginalFilename()));
             String filePath = "/upload/"+file.getOriginalFilename();
+            HttpSession session = request.getSession();
+            session.setAttribute("fileupload",filePath);
             response.setCharacterEncoding("utf-8");
             response.getWriter().write("{\"success\":\""+filePath+"\"}");
     }
@@ -264,10 +336,16 @@ public class StaffControler {
     public void  add(StaffEntity staffEntity,HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            HttpSession session = request.getSession();
+            String filePath = (String) session.getAttribute("fileupload");
             staffEntity.setStaff_id(staffDao.Count()+1);
             String password = MD5_password(staffEntity.getStaff_password());
             staffEntity.setStaff_password(password);
+            staffEntity.setHeadportrait(filePath);
             staffDao.staff_Add(staffEntity);
+            StaffEntity typeEntity = staffDao.staff_One(staffDao.Count());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"staff","增加了一条新数据，新数据为：《 "+typeEntity.toString()+" 》");
+
         } catch (Exception e) {
             flag = true;
         }finally {
@@ -283,7 +361,8 @@ public class StaffControler {
 
 //    查询
     @RequestMapping(value = "queryStaff_Type")
-    public void  query(@RequestParam(value = "staff_id")int staff_id, HttpServletResponse  response) throws Exception{
+    public void  query(@RequestParam(value = "staff_id")int staff_id, HttpServletResponse  response,HttpServletRequest request) throws Exception{
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"Staff_type","单个查询");
         List<StaffTypeEntity>  staffTypeEntities = staffTypeDao.selectstafftype(staff_id);
         response.setCharacterEncoding("utf-8");
         response.getWriter().write(JSON.toJSONString(staffTypeEntities));

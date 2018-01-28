@@ -3,6 +3,7 @@
 <html lang="en">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <link rel="icon" href="/statics/images/bitbug_favicon.ico" type="image/x-icon"/>
     <title>Title</title>
     <link rel="stylesheet" href="/statics/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/statics/css/toastr.min.css">
@@ -24,6 +25,15 @@
 
     <script>
         $(function(){
+
+            $.ajax({
+                url : 'controlbutton.do',
+                data : 'm_id=15',
+                method : "post",
+                dataType : 'JSON',
+                success : controlButton,
+            });
+
             $('#table').bootstrapTable({
                 method:'get',//提交方式
                 url: 'queryDatalist.do',//提交地址
@@ -149,6 +159,7 @@
                     }
                     else if(data.success=="defeated"){
                         parent.toastr.error('修改数据失败', '温馨提示',messageOpts);
+                        $("#table").bootstrapTable('refresh');
                     }
                 }
             });

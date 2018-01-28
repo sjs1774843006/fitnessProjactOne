@@ -15,6 +15,8 @@ public interface StaffTypeDao {
 
     List<StaffTypeEntity> selectAllStaffType(Map<String, Object> map);
 
+    StaffTypeEntity selectOne(int id);
+
     List<StaffTypeEntity> selectAllJurisdictionVo();
 
     int  selectCountStaffType(Map<String, Object> map);

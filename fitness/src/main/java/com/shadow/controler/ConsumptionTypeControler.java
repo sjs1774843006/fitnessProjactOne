@@ -4,6 +4,7 @@ package com.shadow.controler;
 import com.alibaba.fastjson.JSON;
 import com.shadow.dao.ConsumptionTypeDao;
 import com.shadow.dao.MemberCardTypeDao;
+import com.shadow.dao.TheLogDao;
 import com.shadow.entity.ConsumptionTypeEntity;
 import com.shadow.entity.MemberCardTypeEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -22,12 +23,18 @@ import java.util.Map;
 public class ConsumptionTypeControler {
 
     @Resource
+    private TheLogDao theLogDao;
+
+    @Resource
     private ConsumptionTypeDao consumptionTypeDao;
 
 
 //    数据查询分页
     @RequestMapping(value = "queryconsumptionlist")
     public void  query4List(HttpServletRequest request, HttpServletResponse  response) throws Exception{
+
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"consumption_type","查询及分页");
+
         Map<String,Object> querymap = new HashMap<String,Object>();
         String  pageindex = request.getParameter("offset");
         String  pagesize = request.getParameter("limit");
@@ -60,6 +67,8 @@ public class ConsumptionTypeControler {
     public void  delete(@RequestParam(value = "id")int id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            ConsumptionTypeEntity consumptionTypeEntity = consumptionTypeDao.selectOne(id);
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"consumption_type","删除了《"+consumptionTypeEntity.toString()+"这条数据");
             consumptionTypeDao.del(id);
         }catch (Exception e) {
             flag = true;
@@ -79,6 +88,9 @@ public class ConsumptionTypeControler {
     public void  update(ConsumptionTypeEntity consumptionTypeEntity, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            ConsumptionTypeEntity typeEntity = consumptionTypeDao.selectOne(consumptionTypeEntity.getConsumption_type_id());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"consumption_type","修改了数据，原数据为：《 "+typeEntity.toString()+" 》");
+
             consumptionTypeDao.update(consumptionTypeEntity);
         } catch (Exception e) {
             flag = true;
@@ -98,6 +110,9 @@ public class ConsumptionTypeControler {
         try {
             consumptionTypeEntity.setConsumption_type_id(consumptionTypeDao.Count()+1);
             consumptionTypeDao.add(consumptionTypeEntity);
+            ConsumptionTypeEntity typeEntity = consumptionTypeDao.selectOne(consumptionTypeDao.Count());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"consumption_type","增加了一条新数据，新数据为：《 "+typeEntity.toString()+" 》");
+
         } catch (Exception e) {
             flag = true;
         }finally {

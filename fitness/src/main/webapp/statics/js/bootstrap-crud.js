@@ -33,15 +33,19 @@ function update_front(row){
 function submit_data(){
     var visibleColumns = $("#table").bootstrapTable('getVisibleColumns');
     var data={};
-    console.log($("#uploadBtnImg"+IdNameValue).attr("src"))
     $.each(visibleColumns,function(i,v){
        if(v.field==IdName){
             $(data).prop(v.field,IdNameValue);
        }else if(v.field==images_upload_fileid){
-           $(data).prop(v.field,$("#uploadBtnImg"+IdNameValue).attr("src"));
+           if (state == "add") {
+               $(data).prop(v.field,$("#uploadBtnImgw").attr("src"));
+           }else{
+            $(data).prop(v.field,$("#uploadBtnImg"+IdNameValue).attr("src"));
+           }
        }
            $(data).prop(v.field,$('#'+v.field).val())
     });
+
     return data;
 }
 //增加一行
@@ -71,11 +75,11 @@ function add(){
             }
             else if(_edit.type=="img"){
                 images_upload_fileid==column.field;
-                strAppend +='<td><form  id="form_w" >';
-                strAppend += '<input  type="file" name="file" id="file_w" style="display: none">';
-                strAppend += '<div style="border: dashed 1px #ccc; width: 100px ;height: 80px;" id="uploadBtn_w"  >';
+                strAppend +='<td><form  id="formw" >';
+                strAppend += '<input  type="file" name="file" id="filew" style="display: none">';
+                strAppend += '<div style="border: dashed 1px #ccc; width: 100px ;height: 80px;" id="uploadBtnw"  >';
                 strAppend += '<div style=" text-align: center; width: 100px;  height: 80px; float: left; padding-left: 0px; margin-left: 0px;">';
-                strAppend += '<img id="uploadBtnImg_w"   style="cursor: pointer;  width: 100px;  height: 80px;" src="/statics/images/nwc.png">';
+                strAppend += '<img id="uploadBtnImgw"   style="cursor: pointer;  width: 100px;  height: 80px;" src="/statics/images/nwc.png">';
                 strAppend += '</div></div>';
                 strAppend += '</form></td>';
             }
@@ -151,9 +155,9 @@ function add(){
         $.each(form_datetime_ids,function(i,columnName){
             form_datetime(columnName);
         })
+        init('w');
         f=false;
         state="add";
-        init('w');
     }
     else{
         parent.toastr.warning('请完成当前操作', '温馨提示',messageOpts);
@@ -210,6 +214,7 @@ function update(){
                     $(columns).prop(columnName, "<input type='password' class=\"form-control\" value=\"" + rValue + "\" id=\"" + column.field + "\">");
                 }
                 else if(_edit_type=="img"){
+                    ifuploadimg(column.field)
                     images_upload_fileid=column.field;
                 }
                 else if(_edit_type=="checkbox"){
@@ -298,6 +303,10 @@ function update(){
     init(IdNameValue);
 }
 
+function  ifuploadimg(idFiled){
+
+    return ;
+}
 //文本框聚焦事件
 var update_class = function(columnName){
     $("#date_div_class_"+columnName).hasClass('input-group-btn open');
@@ -322,11 +331,10 @@ function value(id,text_name){
 
 //保存数据
 function save(){
-
-if($("#uploadBtnImg"+IdNameValue).attr("src")==null){
-    parent.toastr.warning('请上传头像', '温馨提示', messageOpts);
-    return;
-}
+    if($("#uploadBtnImgw").attr("src")=="/statics/images/nwc.png"){
+        parent.toastr.warning('请上传头像', '温馨提示', messageOpts);
+        return ;
+    }
     //取消禁用
     $("#cancelBtn").attr('disabled',true);
     //保存禁用
@@ -417,6 +425,11 @@ function  sql_delect(url,numberId){
                 parent.toastr.success('删除数据成功','温馨提示',messageOpts);
             }else if(data.success=="defeated"){
                 parent.toastr.error('删除数据失败', '温馨提示',messageOpts);
+                $("#table").bootstrapTable('refresh');
+            }
+            else if(data.success=="insufficient"){
+                parent.toastr.error('无法删除除自己以外他人的信息', '温馨提示',messageOpts);
+                $("#table").bootstrapTable('refresh');
             }
         },
         error: function () {
@@ -463,11 +476,49 @@ function  init(columid){
 
 }
 
+function  controlButton(data){
+    $.each(data,function(k,v){
+        $.each(v,function(key,val){
+            if(val=="add"){
+                $("#addBtn").show();
+                $("#cancelBtn").show();
+                $("#saveBtn").show();
+            }else if(val=="del"){
+                $("#delBtn").show();
+            }else if(val=="update"){
+                $("#editBtn").show();
+                $("#cancelBtn").show();
+                $("#saveBtn").show();
+            }else if(val=="all"){
+                $("#exportBtn").show();
+                // $("#dataBtn").show();
+            }else if(key=="staff"&val=="admin"){
+                $("#addstafftypeBtn").show();
+                $("#jurisdictionBtn").show();
+            }
+        })
+    })
+}
+
+
 $(function(){
     //取消禁用
     $("#cancelBtn").attr('disabled',true);
     //保存禁用
     $("#saveBtn").attr('disabled',true);
+
+    $("#addBtn").hide();
+    $("#delBtn").hide();
+    $("#editBtn").hide();
+    $("#cancelBtn").hide();
+    $("#saveBtn").hide();
+    $("#exportBtn").hide();
+
+    //角色
+    $("#addstafftypeBtn").hide();
+    $("#jurisdictionBtn").hide();
+    // $("#dataBtn").hide();
+
 
     //增加
     $("#addBtn").click(function(){

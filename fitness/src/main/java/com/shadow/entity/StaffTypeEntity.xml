@@ -24,6 +24,10 @@
             limit ${pageindex},${pagesize}
     </select>
 
+    <select id="selectOne"  resultType="StaffTypeEntity"  parameterType="int">
+        SELECT * from  stafftype  where  type_id=#{type_id}
+    </select>
+
     <select id="selectAllJurisdictionVo"  resultType="StaffTypeEntity" >
         SELECT *  from  stafftype
     </select>
@@ -46,16 +50,14 @@
           select * from stafftype
             where type_id in(
                 select type_id from staff_typemanytomany where staff_id in(
-                        select stafftype_id from  staff  where staff_name=#{staff_name} and staff_password=#{staff_password}
+                        select staff_id from  staff  where staff_name=#{staff_name} and staff_password=#{staff_password}
                     )
             )
 
     </select>
 
     <select id="selectstafftype"  resultType="StaffTypeEntity" parameterType="int">
-
-      select * from stafftype  where type_id in (SELECT type_id  from  staff_typemanytomany  where staff_id in( SELECT staff_id  from  staff where  staff_id = #{staff_id} ))
-
+      select * from stafftype  where type_id in (SELECT type_id  from  staff_typemanytomany  where staff_id in( SELECT staff_id  from  staff where  staff_id = #{staff_id}))
     </select>
 
     <insert id="addStaff_Type" parameterType="Map">

@@ -3,6 +3,7 @@ package com.shadow.controler;
 
 import com.alibaba.fastjson.JSON;
 import com.shadow.dao.ConsumptionTypeDao;
+import com.shadow.dao.TheLogDao;
 import com.shadow.dao.ThecoachTypeDao;
 import com.shadow.entity.ConsumptionTypeEntity;
 import com.shadow.entity.ThecoachTypeEntity;
@@ -24,10 +25,16 @@ public class ThecoachTypeControler {
     @Resource
     private ThecoachTypeDao thecoachTypeDao;
 
+    @Resource
+    private TheLogDao theLogDao;
 
-//    数据查询分页
+
+    //    数据查询分页
     @RequestMapping(value = "querythecoachlist")
     public void  query4List(HttpServletRequest request, HttpServletResponse  response) throws Exception{
+
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"thecoach_type","查询及分页");
+
         Map<String,Object> querymap = new HashMap<String,Object>();
         String  pageindex = request.getParameter("offset");
         String  pagesize = request.getParameter("limit");
@@ -60,6 +67,8 @@ public class ThecoachTypeControler {
     public void  delete(@RequestParam(value = "id")int id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            ThecoachTypeEntity consumptionTypeEntity = thecoachTypeDao.selectOne(id);
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"thecoach_type","删除了《"+consumptionTypeEntity.toString()+"这条数据");
             thecoachTypeDao.del(id);
         }catch (Exception e) {
             flag = true;
@@ -79,6 +88,8 @@ public class ThecoachTypeControler {
     public void  update(ThecoachTypeEntity thecoachTypeEntity, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            ThecoachTypeEntity typeEntity = thecoachTypeDao.selectOne(thecoachTypeEntity.getThecoach_type_id());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"thecoach_type","修改了数据，原数据为：《 "+typeEntity.toString()+" 》");
             thecoachTypeDao.update(thecoachTypeEntity);
         } catch (Exception e) {
             flag = true;
@@ -98,6 +109,8 @@ public class ThecoachTypeControler {
         try {
             thecoachTypeEntity.setThecoach_type_id(thecoachTypeDao.Count()+1);
             thecoachTypeDao.add(thecoachTypeEntity);
+            ThecoachTypeEntity typeEntity = thecoachTypeDao.selectOne(thecoachTypeDao.Count());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"thecoach_type","增加了一条新数据，新数据为：《 "+typeEntity.toString()+" 》");
         } catch (Exception e) {
             flag = true;
         }finally {

@@ -16,6 +16,7 @@ public interface ConsumptionTypeDao {
     void  update(ConsumptionTypeEntity consumptionTypeEntity);
 
     List<ConsumptionTypeEntity> selectAll(Map<String, Object> map);
+    ConsumptionTypeEntity selectOne(int id);
 
     int  selectCount(Map<String, Object> map);
 

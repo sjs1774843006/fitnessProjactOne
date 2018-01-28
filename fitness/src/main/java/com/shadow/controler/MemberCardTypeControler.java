@@ -4,6 +4,8 @@ package com.shadow.controler;
 import com.alibaba.fastjson.JSON;
 import com.shadow.dao.MemberCardTypeDao;
 import com.shadow.dao.StaffTypeDao;
+import com.shadow.dao.TheLogDao;
+import com.shadow.entity.ConsumptionTypeEntity;
 import com.shadow.entity.MemberCardTypeEntity;
 import com.shadow.entity.StaffTypeEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -25,9 +27,14 @@ public class MemberCardTypeControler {
     private MemberCardTypeDao memberCardTypeDao;
 
 
-//    数据查询分页
+    @Resource
+    private TheLogDao theLogDao;
+
+
+    //    数据查询分页
     @RequestMapping(value = "queryMemberCardTypelist")
     public void  query4List(HttpServletRequest request, HttpServletResponse  response) throws Exception{
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"member_card_type","查询及分页");
         Map<String,Object> querymap = new HashMap<String,Object>();
         String  pageindex = request.getParameter("offset");
         String  pagesize = request.getParameter("limit");
@@ -60,6 +67,8 @@ public class MemberCardTypeControler {
     public void  delete(@RequestParam(value = "id")int id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            MemberCardTypeEntity memberCardTypeEntity = memberCardTypeDao.selectOne(id);
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"member_card_type","删除了《"+memberCardTypeEntity.toString()+"这条数据");
             memberCardTypeDao.del(id);
         }catch (Exception e) {
             flag = true;
@@ -79,6 +88,8 @@ public class MemberCardTypeControler {
     public void  update(MemberCardTypeEntity memberCardTypeEntity, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            MemberCardTypeEntity cardTypeEntity = memberCardTypeDao.selectOne(memberCardTypeEntity.getMember_card_type_id());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"member_card_type","修改了数据，原数据为：《 "+cardTypeEntity.toString()+" 》");
             memberCardTypeDao.update(memberCardTypeEntity);
         } catch (Exception e) {
             flag = true;
@@ -98,6 +109,8 @@ public class MemberCardTypeControler {
         try {
             memberCardTypeEntity.setMember_card_type_id(memberCardTypeDao.Count()+1);
             memberCardTypeDao.add(memberCardTypeEntity);
+            MemberCardTypeEntity cardTypeEntity = memberCardTypeDao.selectOne(memberCardTypeDao.Count());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"consumption_type","增加了一条新数据，新数据为：《 "+cardTypeEntity.toString()+" 》");
         } catch (Exception e) {
             flag = true;
         }finally {

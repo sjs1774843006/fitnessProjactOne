@@ -3,7 +3,8 @@
 <html lang="en">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Title</title>
+    <link rel="icon" href="/statics/images/bitbug_favicon.ico" type="image/x-icon"/>
+    <title>员工界面</title>
     <link rel="stylesheet" href="/statics/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/statics/css/toastr.min.css">
     <link rel="stylesheet" href="/statics/css/datetimepicker.css">
@@ -22,6 +23,15 @@
 
     <script>
         $(function(){
+
+            $.ajax({
+                url : 'controlbutton.do',
+                data : 'm_id=34',
+                method : "post",
+                dataType : 'JSON',
+                success : controlButton,
+            });
+
             $('#table').bootstrapTable({
                 method:'get',//提交方式
                 url: 'queryStafflist.do',//提交地址
@@ -178,7 +188,7 @@
                     return;
                 }
                 $('#_modalDialog').modal('show');
-                openwindow_text(arrselections[0].staff_id,'typeJsp.do','');
+                openwindow_text(arrselections[0].staff_id,'typeJsp.do','','');
 
             });
             //授权限
@@ -200,7 +210,7 @@
                         return;
                     }
                     $('#_modalDialog').modal('show');
-                    openwindow_text(arrselections[0].staff_id,'ztreeStaffJsp.do','staffjurisdiction.do');
+                    openwindow_text(arrselections[0].staff_id,'ztreeStaffJsp.do','staffjurisdiction.do','savestaff_jurisdiction.do');
                 }
             })
 //            看权限
@@ -225,7 +235,7 @@
                                 parent.toastr.error('该用户当前无任何权限', '温馨提示',messageOpts);
                             }else {
                                 $('#_modalDialog').modal('show');
-                                openwindow_text(arrselections[0].staff_id,'userrolepermissionsJsp.do','');
+                                openwindow_text(arrselections[0].staff_id,'userrolepermissionsJsp.do','','');
                             }
                         }
                     });
@@ -235,9 +245,10 @@
 
         })
 
-        function openwindow_text(type_id,url,jsp){
+        function openwindow_text(type_id,url,jsp,saveurl){
             sessionStorage.setItem('staff_id', type_id);
             sessionStorage.setItem('query', jsp);
+            sessionStorage.setItem('save', saveurl);
             $("#selectTree").html(" <iframe frameborder = '0' border = '0'  src='"+url+"'  scrolling='no' width=99% height=99% ></iframe>")
         }
 
@@ -250,7 +261,7 @@
                 url: "addStaff.do",
                 ansyn:false,
                 data: datass,
-                dataType: "text",
+                dataType: "JSON",
                 success: function (data) {
                     if (data.success=="success") {
                         parent.toastr.success('数据增加成功','温馨提示',messageOpts);
@@ -258,6 +269,7 @@
                     }
                     else if(data.success=="defeated"){
                         parent.toastr.error('数据增加失败', '温馨提示',messageOpts);
+                        $("#table").bootstrapTable('refresh');
                     }
                 }
             });
@@ -277,6 +289,11 @@
                     }
                     else if(data.success=="defeated"){
                         parent.toastr.error('修改数据失败', '温馨提示',messageOpts);
+                        $("#table").bootstrapTable('refresh');
+                    }
+                    else if(data.success=="insufficient"){
+                        parent.toastr.error('无法修改除自己以外他人的信息', '温馨提示',messageOpts);
+                        $("#table").bootstrapTable('refresh');
                     }
                 }
             });

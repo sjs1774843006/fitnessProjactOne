@@ -3,7 +3,8 @@
 <html lang="en">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Title</title>
+    <link rel="icon" href="/statics/images/bitbug_favicon.ico" type="image/x-icon"/>
+    <title>日志界面</title>
     <link rel="stylesheet" href="/statics/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/statics/css/toastr.min.css">
     <link rel="stylesheet" href="/statics/css/datetimepicker.css">
@@ -24,6 +25,16 @@
 
     <script>
         $(function(){
+
+            $.ajax({
+                url : 'controlbutton.do',
+                data : 'm_id=8',
+                method : "post",
+                dataType : 'JSON',
+                success : controlButton,
+            });
+
+
             $('#table').bootstrapTable({
                 method:'get',//提交方式
                 url: 'queryTheLoglist.do',//提交地址
@@ -32,14 +43,11 @@
                 sortable: false,//设置为false 将禁止所有列的排序
                 sortOrder: "asc",//定义排序方式 'asc' 或者 'desc'
                 pageSize: 10,
-                height:850,
-                pageList: [10, 25, 50, 100],
+                pageList: [5,10,25,50,75,100],
                 queryParams:function(params){
-//                    var subcompany = $('#subcompany option:selected').val();
                     return {
                         offset: params.offset,
                         limit: params.limit,
-//                        companyId:subcompany,
                         searchText:params.search,
                     };
                 },
@@ -57,9 +65,6 @@
                 clickToSelect:'true',//设置true 将在点击行时，自动选择rediobox 和 checkbox
                 toolbar:'#searchPanel',//一个jQuery 选择器，指明自定义的toolbar
                 columns:[{
-                    checkbox: true,
-                    visible: true
-                }, {
                     field: 'thelog_id',
                     title: 'ID',
                     align:'center',
@@ -69,7 +74,9 @@
                     title: '日志内容',
                     align:'center',
                     sortable:'true',
-
+                    cellStyle:{
+                        css:{"color":"red"}
+                    }
                 }, {
                     field: 'thelog_date',
                     title: '操作时间',
@@ -77,11 +84,13 @@
                     sortable:'true',
 
                 }, {
-                    field: 'staffmember_id',
+                    field: 'staffmember_name',
                     title: '操作人',
                     align:'center',
                     sortable:'true',
-
+                    cellStyle:{
+                        css:{"color":"red"}
+                    }
                 }
                 ],
 
@@ -103,8 +112,6 @@
 <body style="width: auto;height: 99%">
 
 <div id="searchPanel">
-
-        <%--<button type="button" class="btn btn-danger  glyphicon  glyphicon-minus "        id="delBtn"    >&nbsp;删&nbsp;除</button>--%>
         <button type="button" class="btn btn-inverse glyphicon  glyphicon-export"        id="exportBtn" >&nbsp;导出Excel</button>
 </div>
     <table id="table"></table>

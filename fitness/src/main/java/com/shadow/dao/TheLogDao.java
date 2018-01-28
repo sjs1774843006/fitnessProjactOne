@@ -19,6 +19,5 @@ public interface TheLogDao {
 
     int  selectCount(Map<String, Object> map);
 
-    int  Count();
 
 }

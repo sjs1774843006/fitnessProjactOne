@@ -4,6 +4,8 @@ package com.shadow.controler;
 import com.alibaba.fastjson.JSON;
 import com.shadow.dao.ProgressDao;
 import com.shadow.dao.StaffTypeDao;
+import com.shadow.dao.TheLogDao;
+import com.shadow.entity.ConsumptionTypeEntity;
 import com.shadow.entity.ProgressEntity;
 import com.shadow.entity.StaffTypeEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -24,10 +26,18 @@ public class ProgressControler {
     @Resource
     private ProgressDao progressDao;
 
+    @Resource
+    private TheLogDao theLogDao;
 
-//    数据查询分页
+
+    //    数据查询分页
     @RequestMapping(value = "queryProgresslist")
     public void  query4List(HttpServletRequest request, HttpServletResponse  response) throws Exception{
+
+
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"progress","查询及分页");
+
+
         Map<String,Object> querymap = new HashMap<String,Object>();
         String  pageindex = request.getParameter("offset");
         String  pagesize = request.getParameter("limit");
@@ -59,6 +69,9 @@ public class ProgressControler {
     public void  update(ProgressEntity progressEntity, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            ProgressEntity typeEntity = progressDao.selectOne(progressEntity.getParentId());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"progress","修改了数据，原数据为：《 "+typeEntity.toString()+" 》");
+
             progressDao.update(progressEntity);
         } catch (Exception e) {
             flag = true;
@@ -77,6 +90,8 @@ public class ProgressControler {
     public void  delete(@RequestParam(value = "id")int id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            ProgressEntity entity = progressDao.selectOne(id);
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"progress","删除了《"+entity.toString()+"这条数据");
             progressDao.del(id);
         }catch (Exception e) {
             flag = true;
@@ -98,6 +113,9 @@ public class ProgressControler {
         try {
             progressEntity.setProgress_id(progressDao.Count()+1);
             progressDao.add(progressEntity);
+            ProgressEntity typeEntity = progressDao.selectOne(progressDao.Count());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"progress","增加了一条新数据，新数据为：《 "+typeEntity.toString()+" 》");
+
         } catch (Exception e) {
             flag = true;
         }finally {

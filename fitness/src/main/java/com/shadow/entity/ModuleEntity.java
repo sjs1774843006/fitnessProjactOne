@@ -43,13 +43,14 @@ public class ModuleEntity {
 		this._parentId = _parentId;
 	}
 
-	public boolean isModule_parent() {
+	public boolean getModule_parent() {
 		return module_parent;
 	}
 
 	public void setModule_parent(boolean module_parent) {
 		this.module_parent = module_parent;
 	}
+
 
 	public int getModule_id() {
 		return module_id;

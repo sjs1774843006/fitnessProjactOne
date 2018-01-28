@@ -8,6 +8,7 @@ import java.util.Map;
 public interface DataDictionaryDao {
 
     List<DataDictionaryEntity> selectAll(Map<String,Object> map);
+    DataDictionaryEntity selectOne(int id);
 
     int  selectCount(Map<String,Object> map);
 

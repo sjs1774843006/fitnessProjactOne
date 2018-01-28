@@ -16,6 +16,10 @@
         UPDATE  commission_data SET Commission_data=#{Commission_data}  where Commission_data_id=#{Commission_data_id}
     </update>
 
+    <select id="selectOne"  resultType="CommissionDataEntity"  parameterType="int">
+        SELECT * from  commission_data  WHERE  Commission_data_id=#{Commission_data_id}
+    </select>
+
     <select id="selectAll"  resultType="CommissionDataEntity"  parameterType="Map">
         SELECT * from  commission_data
         <if test="name != null  ">
@@ -32,7 +36,7 @@
     </select>
 
     <select id="Count"  resultType="int" >
-        SELECT MAX (Commission_data_id) from   commission_data
+        SELECT MAX(Commission_data_id) from   commission_data
     </select>
 
 </mapper>

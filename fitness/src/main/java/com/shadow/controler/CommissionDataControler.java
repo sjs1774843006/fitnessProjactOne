@@ -3,7 +3,10 @@ package com.shadow.controler;
 
 import com.alibaba.fastjson.JSON;
 import com.shadow.dao.CommissionDataDao;
+import com.shadow.dao.TheLogDao;
 import com.shadow.entity.CommissionDataEntity;
+import com.shadow.entity.StaffEntity;
+import com.shadow.entity.TheLogEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,12 +25,18 @@ import java.util.Map;
 public class CommissionDataControler {
 
     @Resource
+    private TheLogDao theLogDao;
+
+    @Resource
     private CommissionDataDao commissionDataDao;
+
 
 
 //    数据查询分页
     @RequestMapping(value = "querycommissiondatalist")
     public void  query4List(HttpServletRequest request, HttpServletResponse  response) throws Exception{
+
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"commission_data","查询及分页");
         Map<String,Object> querymap = new HashMap<String,Object>();
         String  pageindex = request.getParameter("offset");
         String  pagesize = request.getParameter("limit");
@@ -58,6 +69,8 @@ public class CommissionDataControler {
     public void  delete(@RequestParam(value = "id")int id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            CommissionDataEntity commissionDataEntity = commissionDataDao.selectOne(id);
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"commission_data","删除了《"+commissionDataEntity.toString()+"这条数据");
             commissionDataDao.del(id);
         }catch (Exception e) {
             flag = true;
@@ -77,6 +90,8 @@ public class CommissionDataControler {
     public void  update(CommissionDataEntity royaltyRateEntity, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            CommissionDataEntity commissionDataEntity = commissionDataDao.selectOne(royaltyRateEntity.getCommission_data_id());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"commission_data","修改了数据，原数据为：《 "+commissionDataEntity.toString()+" 》");
             commissionDataDao.update(royaltyRateEntity);
         } catch (Exception e) {
             flag = true;
@@ -96,6 +111,8 @@ public class CommissionDataControler {
         try {
             royaltyRateEntity.setCommission_data_id(commissionDataDao.Count()+1);
             commissionDataDao.add(royaltyRateEntity);
+            CommissionDataEntity commissionDataEntity = commissionDataDao.selectOne(commissionDataDao.Count());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"commission_data","增加了一条新数据，新数据为：《 "+commissionDataEntity.toString()+" 》");
         } catch (Exception e) {
             flag = true;
         }finally {

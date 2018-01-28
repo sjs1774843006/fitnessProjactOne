@@ -8,7 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <link rel="icon" href="/statics/images/bitbug_favicon.ico" type="image/x-icon"/>
+    <title>员工拥有权限</title>
     <link href="/statics/themes/insdep/easyui_full.css" rel="stylesheet" type="text/css">
     <link href="/statics/themes/insdep/icon.css" rel="stylesheet" type="text/css">
     <link href="/statics/themes/metroStyle/metroStyle.css" rel="stylesheet" type="text/css">

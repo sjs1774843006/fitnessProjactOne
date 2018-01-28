@@ -9,7 +9,7 @@
     </delete>
 
     <insert id="staff_Add"  parameterType="StaffEntity" >
-       INSERT INTO Staff  VALUES(#{staff_name},#{staff_password},#{staff_sex},#{staff_age},#{staff_tel},#{staff_address},#{staff_idcard},#{headportrait})
+       INSERT INTO Staff  VALUES(#{staff_id},#{staff_name},#{staff_password},#{staff_sex},#{staff_age},#{staff_tel},#{staff_address},#{staff_idcard},#{headportrait})
     </insert>
 
     <update id="staff_Upd"  parameterType="StaffEntity" >
@@ -24,6 +24,14 @@
         limit ${pageindex},${pagesize}
     </select>
 
+    <select id="staff_One"  resultType="StaffEntity"  parameterType="int">
+        SELECT * from  Staff  WHERE staff_id=#{staff_id}
+    </select>
+
+    <select id="staffOnename"  resultType="String"  parameterType="int">
+        SELECT staff_name from  Staff  WHERE staff_id=#{staff_id}
+    </select>
+
     <select id="selectCount"  resultType="int"  parameterType="Map">
         SELECT count(*) from   Staff
         <if test="name != null ">
@@ -32,7 +40,7 @@
     </select>
 
     <select id="Count"  resultType="int" >
-        SELECT MAX (staff_id) from   Staff
+        SELECT MAX(staff_id) from   Staff
     </select>
 
     <select id="selectOne"  resultType="StaffEntity"  parameterType="Map" >
@@ -45,6 +53,14 @@
          JOIN staff_typemanytomany  b
         on a.staff_id = b.staff_id
         where  a.staff_id=#{staff_id}
+    </select>
+
+    <select id="j_mo_btn" resultType="com.shadow.dto.M_ODtoEntity" parameterType="int">
+          select m_id,o_id from j_mo where j_id in(SELECT type_id from  stafftype  where type_id = #{type_id})and (o_id=1 OR o_id = 2 or o_id = 3 or o_id = 4) and m_id = #{m_id};
+    </select>
+
+    <select id="jmo_staff_btn" resultType="com.shadow.dto.M_ODtoEntity" parameterType="int">
+          select m_id,o_id from jmo_staff  where j_id in(SELECT staff_id from  staff  where staff_id = #{staff_id})and (o_id=1 OR o_id = 2 or o_id = 3 or o_id = 4) and m_id = #{m_id};
     </select>
 
 

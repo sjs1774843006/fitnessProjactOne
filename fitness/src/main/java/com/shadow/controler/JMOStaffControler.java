@@ -26,6 +26,10 @@ public class JMOStaffControler {
     @Resource
     private JMOStaffDao jmoStaffDao;
 
+    @Resource
+    private TheLogDao theLogDao;
+
+
     private JMOStaffEntity jmoAdd = null;
     private JMOStaffEntity jmoUpdate = null;
     private JMOStaffEntity jmoDel = null;
@@ -35,6 +39,7 @@ public class JMOStaffControler {
     //增加
     @RequestMapping(value="savestaff_jurisdiction")
     public void save(@RequestParam(value = "jid")int jid, HttpServletRequest  request, HttpServletResponse response) throws IOException{
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"员工权限","进行了修改");
         String content = request.getParameter("content");
         List<M_ODtoEntity>  dellist = jmoStaffDao.delList(jid);
         jmoStaffDao.delJ_MO(jid);

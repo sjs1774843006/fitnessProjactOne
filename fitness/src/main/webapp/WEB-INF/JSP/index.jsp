@@ -1,10 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@page isELIgnored="false" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>后台模板</title>
+    <link rel="icon" href="/statics/images/bitbug_favicon.ico" type="image/x-icon"/>
+    <title>后台首页</title>
     <link rel="stylesheet" href="/statics/assets/css/amazeui.css" />
     <link rel="stylesheet" href="/statics/assets/css/core.css" />
     <link rel="stylesheet" href="/statics/assets/css/menu.css" />
@@ -20,7 +22,8 @@
     <script type="text/javascript" src="/statics/assets/js/amazeui.min.js"></script>
     <script type="text/javascript" src="/statics/assets/js/blockUI.js" ></script>
     <script type="text/javascript" src="/statics/bootstrap/js/bootstrap.min.js" ></script>
-    <script type="text/javascript" src="/statics/js/toastr.js" ></script>
+    <script type="text/javascript" src="/statics/js/toastr.js"></script>
+    <script type="text/javascript" src="/statics/js/toastr-min.js"></script>
     <script type="text/javascript" src="/statics/js/BootstrapMenu.min.js" ></script>
     <script type="text/javascript" src="/statics/js/bootstrap-tab.js" ></script>
 </head>
@@ -31,9 +34,32 @@
         <div class="am-offcanvas-bar admin-offcanvas-bar" >
             <div class="user-box am-hide-sm-only">
                 <div class="user-img">
-                    <img src="/statics/assets/img/avatar-1.jpg" alt="user-img" title="Mat Helme" class="img-circle img-thumbnail img-responsive">
+                    <img src="${sessionScope.staff.headportrait}" alt="user-img" title="Mat Helme" class="img-circle img-thumbnail img-responsive" style="height: 80px;">
                     <div class="user-status offline"><i class="am-icon-dot-circle-o" aria-hidden="true"></i></div>
+                    <span ><a style="color: #000000; font-size: 20px;cursor: pointer;" id="logout">${sessionScope.staff.staff_name}</a></span>
                 </div>
+<script>
+    $(function(){
+        $("#logout").click(function(){
+            Ewin.confirm({ message: "确定退出吗？" }).on(function (e) {
+                if (!e) {
+                    return;
+                }
+                location.href='loginout.do';
+            })
+
+        })
+
+        $("#logout").mouseover(function(){
+            $("#logout").css("color","red");
+        });
+        $("#logout").mouseout(function(){
+            $("#logout").css("color","#000000");
+        });
+
+    })
+
+</script>
 
                 <ul class="list-inline">
                     <li>

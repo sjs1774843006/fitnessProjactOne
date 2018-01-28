@@ -3,6 +3,8 @@ package com.shadow.controler;
 
 import com.alibaba.fastjson.JSON;
 import com.shadow.dao.DataDictionaryDao;
+import com.shadow.dao.TheLogDao;
+import com.shadow.entity.ConsumptionTypeEntity;
 import com.shadow.entity.DataDictionaryEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
@@ -22,10 +24,15 @@ public class DataDictionaryControler {
     @Resource
     private DataDictionaryDao dataDictionaryDao;
 
+    @Resource
+    private TheLogDao theLogDao;
 
-//    数据查询分页
+
+    //    数据查询分页
     @RequestMapping(value = "queryDatalist")
     public void  query4List(HttpServletRequest request, HttpServletResponse  response) throws Exception{
+
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"data_dictionary","查询及分页");
         Map<String,Object> querymap = new HashMap<String,Object>();
         String  pageindex = request.getParameter("offset");
         String  pagesize = request.getParameter("limit");
@@ -58,6 +65,8 @@ public class DataDictionaryControler {
     public void  delete(@RequestParam(value = "id")int id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            DataDictionaryEntity dataDictionaryEntity = dataDictionaryDao.selectOne(id);
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"data_dictionary","删除了《"+dataDictionaryEntity.toString()+"这条数据");
             dataDictionaryDao.del(id);
         } catch (Exception e) {
             flag = true;
@@ -77,6 +86,8 @@ public class DataDictionaryControler {
     public void  update(DataDictionaryEntity dataDictionaryEntity, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            DataDictionaryEntity dictionaryEntity = dataDictionaryDao.selectOne(dataDictionaryEntity.getData_id());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"data_dictionary","修改了数据，原数据为：《 "+dictionaryEntity.toString()+" 》");
             dataDictionaryDao.update(dataDictionaryEntity);
         } catch (Exception e) {
             flag = true;

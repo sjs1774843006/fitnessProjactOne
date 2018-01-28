@@ -3,7 +3,8 @@
 <html lang="en">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Title</title>
+    <link rel="icon" href="/statics/images/bitbug_favicon.ico" type="image/x-icon"/>
+    <title>员工类型</title>
     <link rel="stylesheet" href="/statics/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/statics/css/toastr.min.css">
     <link rel="stylesheet" href="/statics/css/datetimepicker.css">
@@ -80,21 +81,6 @@
                             false:'false',
                         }
                     }
-//                    edit:{
-//                        type:'combogrid',
-//                        idField:'module_id',//url中返回的ID
-//                        url:'queryModulelist.do',//url请求
-//                        columns : [ [
-//                            {
-//                            title : "员工编号",
-//                            field : "module_id",
-//
-//                        },{
-//                            title : "员工名称",
-//                            field : "module_name",
-//                        }
-//                        ]]
-//                    }
                 }
                 ],
 
@@ -132,6 +118,7 @@
                     }
                     else if(data.success=="defeated"){
                         parent.toastr.error('数据增加失败', '温馨提示',messageOpts);
+                        $("#table").bootstrapTable('refresh');
                     }
                 }
             });
@@ -151,6 +138,7 @@
                     }
                     else if(data.success=="defeated"){
                         parent.toastr.error('修改数据失败', '温馨提示',messageOpts);
+                        $("#table").bootstrapTable('refresh');
                     }
                 }
             });

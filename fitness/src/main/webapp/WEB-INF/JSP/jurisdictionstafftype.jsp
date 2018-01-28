@@ -3,7 +3,8 @@
 <html lang="en">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Title</title>
+    <link rel="icon" href="/statics/images/bitbug_favicon.ico" type="image/x-icon"/>
+    <title>员工权限</title>
     <link rel="stylesheet" href="/statics/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/statics/css/toastr.min.css">
     <link rel="stylesheet" href="/statics/css/datetimepicker.css">
@@ -22,6 +23,16 @@
 
     <script>
         $(function(){
+
+            $.ajax({
+                url : 'controlbutton.do',
+                data : 'm_id=11',
+                method : "post",
+                dataType : 'JSON',
+                success : controlButton,
+            });
+
+
             $('#table').bootstrapTable({
                 method:'get',//提交方式
                 url: 'queryStaffTypelist.do',//提交地址
@@ -80,21 +91,6 @@
                             false:'false',
                         }
                     }
-//                    edit:{
-//                        type:'combogrid',
-//                        idField:'module_id',
-//                        url:'queryModulelist.do',
-//                        columns : [ [
-//                            {
-//                            title : "员工编号",
-//                            field : "module_id",
-//
-//                        },{
-//                            title : "员工名称",
-//                            field : "module_name",
-//                        }
-//                        ]]
-//                    }
                 }
                 ],
 
@@ -113,11 +109,11 @@
 
             //权限数据项
             $("#jurisdictionBtn").click(function(){
-                var arrselections
+
                 if(!f){
                     parent.toastr.info('请完成当前操作', '温馨提示',messageOpts);
                 }else {
-                    arrselections = $("#table").bootstrapTable('getSelections');
+                    var arrselections = $("#table").bootstrapTable('getSelections');
                     if (arrselections.length <= 0) {
                         toastr.warning('请选择需要的授权的数据项', '温馨提示', messageOpts);
                         return;
@@ -126,16 +122,17 @@
                         return;
                     }
                     $('#_modalDialog').modal('show');
-                    openwindow_text(arrselections[0].type_id,'ztreeStaffJsp.do','jurisdiction_data.do');
+                    openwindow_text(arrselections[0].type_id,'ztreeStaffJsp.do','jurisdiction_data.do','save_jurisdiction.do');
                 }
             })
 
 
         })
 
-        function openwindow_text(type_id,url,jsp){
+        function openwindow_text(type_id,url,jsp,saveurl){
             sessionStorage.setItem('staff_id', type_id);
             sessionStorage.setItem('query', jsp);
+            sessionStorage.setItem('save', saveurl);
             $("#selectTree").html(" <iframe frameborder = '0' border = '0'  src='"+url+"'  scrolling='no' width=99% height=99% ></iframe>")
         }
 
@@ -153,6 +150,7 @@
                     }
                     else if(data.success=="defeated"){
                         parent.toastr.error('数据增加失败', '温馨提示',messageOpts);
+                        $("#table").bootstrapTable('refresh');
                     }
                 }
             });
@@ -172,6 +170,7 @@
                     }
                     else if(data.success=="defeated"){
                         parent.toastr.error('修改数据失败', '温馨提示',messageOpts);
+                        $("#table").bootstrapTable('refresh');
                     }
                 }
             });

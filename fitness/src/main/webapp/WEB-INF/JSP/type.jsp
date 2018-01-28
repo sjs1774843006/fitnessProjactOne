@@ -70,7 +70,6 @@
             })
             $.ajax({
                 type: "post",
-                ansyn:false,
                 url: "queryStaff_Type.do?staff_id="+type,
                 dataType: "JSON",
                 success: function (data) {
@@ -96,6 +95,7 @@
                                     success: function (data) {
                                         if (data.success=="success") {
                                             parent.$("#table").bootstrapTable('refresh');
+                                            $("#table").bootstrapTable('refresh');
                                         }
                                         else if(data.success=="defeated"){
                                         }
@@ -110,6 +110,7 @@
                                 success: function (data) {
                                     if (data.success=="success") {
                                         parent.$("#table").bootstrapTable('refresh');
+                                        $("#table").bootstrapTable('refresh');
                                     }
                                     else if(data.success=="defeated"){
                                     }
@@ -128,7 +129,7 @@
                         checked : true//设置选中
                     };
             }
-            return value;
+//            return value;
         }
 
 

@@ -1,5 +1,6 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -7,12 +8,13 @@
     <meta http-equiv="pragma" content="no-cache">
     <meta http-equiv="cache-control" content="no-cache">
     <meta http-equiv="expires" content="0">
+    <link rel="icon" href="/statics/images/bitbug_favicon.ico" type="image/x-icon"/>
     <title>登录界面</title>
-    <link href="statics/layui/test/default.css" rel="stylesheet" type="text/css" />
+    <link href="../../statics/layui/test/default.css" rel="stylesheet" type="text/css" />
     <!--必要样式-->
-    <link href="statics/layui/test/styles.css" rel="stylesheet" type="text/css" />
-    <link href="statics/layui/test/demo.css" rel="stylesheet" type="text/css" />
-    <link href="statics/layui/test/loaders.css" rel="stylesheet" type="text/css" />
+    <link href="../../statics/layui/test/styles.css" rel="stylesheet" type="text/css" />
+    <link href="../../statics/layui/test/demo.css" rel="stylesheet" type="text/css" />
+    <link href="../../statics/layui/test/loaders.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
 <div class='login'>
@@ -22,25 +24,25 @@
     <div class='login_fields'>
         <div class='login_fields__user'>
             <div class='icon'>
-                <img alt="" src='statics/layui/img/user_icon_copy.png'>
+                <img alt="" src='../../statics/layui/img/user_icon_copy.png'>
             </div>
             <input name="login" placeholder='用户名' maxlength="16" type='text' autocomplete="off" value=""/>
             <div class='validation'>
-                <img alt="" src='statics/layui/img/tick.png'>
+                <img alt="" src='../../statics/layui/img/tick.png'>
             </div>
         </div>
         <div class='login_fields__password'>
             <div class='icon'>
-                <img alt="" src='statics/layui/img/lock_icon_copy.png'>
+                <img alt="" src='../../statics/layui/img/lock_icon_copy.png'>
             </div>
             <input name="pwd" placeholder='密码' maxlength="16" type='text' autocomplete="off">
             <div class='validation'>
-                <img alt="" src='statics/layui/img/tick.png'>
+                <img alt="" src='../../statics/layui/img/tick.png'>
             </div>
         </div>
         <div class='login_fields__password'>
             <div class='icon'>
-                <img alt="" src='statics/layui/img/key.png'>
+                <img alt="" src='../../statics/layui/img/key.png'>
             </div>
             <input name="code" placeholder='验证码' maxlength="4" type='text' name="ValidateNum" autocomplete="off">
             <div class='validation' style="opacity: 1; right: -5px;top: -3px;">
@@ -65,17 +67,17 @@
             <div></div>
         </div>
     </div>
-    <p>认证中...</p>
+    <p>登录中...</p>
 </div>
 <div class="OverWindows"></div>
-<link href="statics/layui/css/layui.css" rel="stylesheet" type="text/css" />
+<link href="../../statics/layui/css/layui.css" rel="stylesheet" type="text/css" />
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" src="statics/layui/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src='statics/layui/js/stopExecutionOnTimeout.js?t=1'></script>
-<script src="statics/layui/layui.js" type="text/javascript"></script>
-<script src="statics/layui/js/Particleground.js" type="text/javascript"></script>
-<script src="statics/layui/js/Treatment.js" type="text/javascript"></script>
-<script src="statics/layui/js/jquery.mockjax.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../statics/layui/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src='../../statics/layui/js/stopExecutionOnTimeout.js?t=1'></script>
+<script src="../../statics/layui/layui.js" type="text/javascript"></script>
+<script src="../../statics/layui/js/Particleground.js" type="text/javascript"></script>
+<script src="../../statics/layui/js/Treatment.js" type="text/javascript"></script>
+<script src="../../statics/layui/js/jquery.mockjax.js" type="text/javascript"></script>
 
 <script type="text/javascript">
     var canGetCookie = 0;//是否支持存储Cookie 0 不支持 1 支持
@@ -176,7 +178,7 @@
                 }, 500);
 
                 $.ajax({
-                    url:'login.do',
+                    url:'loginsubmit.do',
                     method:'post',
                     dataType:'JSON',
                     data:"account="+login+"&passwrod="+pwd,
@@ -224,9 +226,27 @@
                                 $('input[name="code"]').val("")
                                 Code();
                             }, 2400);
+                        }else if(data.success=="datatime"){
+                            setTimeout(function () {
+                                $('.authent').show().animate({ right: 90 }, {
+                                    easing: 'easeOutQuint',
+                                    duration: 600,
+                                    queue: false
+                                });
+                                $('.authent').animate({ opacity: 0 }, {
+                                    duration: 200,
+                                    queue: false
+                                }).addClass('visible');
+                                $('.login').removeClass('testtwo'); //平移特效
+                            }, 2000);
+                            setTimeout(function () {
+                                $('.authent').hide();
+                                $('.login').removeClass('test');
+                                ErroAlert('登录超时!请重试');
+                                $('input[name="code"]').val("")
+                                Code();
+                            }, 2400);
                         }
-
-
                     }
 
                 });

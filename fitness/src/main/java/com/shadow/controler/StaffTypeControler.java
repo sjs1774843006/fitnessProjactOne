@@ -4,6 +4,8 @@ package com.shadow.controler;
 import com.alibaba.fastjson.JSON;
 import com.shadow.dao.DataDictionaryDao;
 import com.shadow.dao.StaffTypeDao;
+import com.shadow.dao.TheLogDao;
+import com.shadow.entity.ConsumptionTypeEntity;
 import com.shadow.entity.DataDictionaryEntity;
 import com.shadow.entity.StaffTypeEntity;
 import org.apache.commons.lang3.StringUtils;
@@ -24,10 +26,14 @@ public class StaffTypeControler {
     @Resource
     private StaffTypeDao staffTypeDao;
 
+    @Resource
+    private TheLogDao theLogDao;
 
-//    数据查询分页
+
+    //    数据查询分页
     @RequestMapping(value = "queryStaffTypelist")
     public void  query4List(HttpServletRequest request, HttpServletResponse  response) throws Exception{
+        InterfaceJumpControler.theLogAdd(request,theLogDao,"staff_type","查询及分页");
         Map<String,Object> querymap = new HashMap<String,Object>();
         String  pageindex = request.getParameter("offset");
         String  pagesize = request.getParameter("limit");
@@ -60,6 +66,8 @@ public class StaffTypeControler {
     public void  delete(@RequestParam(value = "id")int id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            StaffTypeEntity consumptionTypeEntity = staffTypeDao.selectOne(id);
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"staff_type","删除了《"+consumptionTypeEntity.toString()+"这条数据");
             staffTypeDao.delStaffType(id);
         }catch (Exception e) {
             flag = true;
@@ -79,6 +87,8 @@ public class StaffTypeControler {
     public void  update(StaffTypeEntity staffTypeEntity, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            StaffTypeEntity typeEntity = staffTypeDao.selectOne(staffTypeEntity.getType_id());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"staff_type","修改了数据，原数据为：《 "+typeEntity.toString()+" 》");
             staffTypeDao.updateStaffType(staffTypeEntity);
         } catch (Exception e) {
             flag = true;
@@ -98,6 +108,9 @@ public class StaffTypeControler {
         try {
             staffTypeEntity.setType_id(staffTypeDao.CountStaffType()+1);
             staffTypeDao.addStaffType(staffTypeEntity);
+            StaffTypeEntity typeEntity = staffTypeDao.selectOne(staffTypeDao.CountStaffType());
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"staff_type","增加了一条新数据，新数据为：《 "+typeEntity.toString()+" 》");
+
         } catch (Exception e) {
             flag = true;
         }finally {
@@ -118,8 +131,10 @@ public class StaffTypeControler {
         map.put("type_id",type_id);
         boolean flag = false;
         try {
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"staff_typemanytomany","删除了一条数据");
             //删除用户对应的角色
             staffTypeDao.delStaff_Type(staff_id);
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"staff_typemanytomany","重新保存了一条数据");
             //重新保存
             staffTypeDao.addStaff_Type(map);
 
@@ -138,8 +153,10 @@ public class StaffTypeControler {
     public void  deleteType(@RequestParam(value = "staff_id")int staff_id, HttpServletRequest request, HttpServletResponse  response) throws Exception{
         boolean flag = false;
         try {
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"staff_typemanytomany","删除了一条数据");
                 //删除用户角色表
                 staffTypeDao.delStaff_Type(staff_id);
+            InterfaceJumpControler.theLogAdd(request,theLogDao,"jmo_staff","删除了数据");
                 //删除一个用户单独的权限
                 staffTypeDao.deljmo_staff(staff_id);
         }catch (Exception e) {

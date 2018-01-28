@@ -5,7 +5,7 @@
 <mapper namespace="com.shadow.dao.TheLogDao">
 
     <insert id="add" parameterType="TheLogEntity">
-        INSERT INTO thelog  VALUES (#{thelog_id},#{thelog_contents},#{thelog_date},#{staffmember_id});
+       INSERT INTO thelog (Thelog_contents,Thelog_date,Staffmember_id) VALUES (#{thelog_contents},#{thelog_date},#{staffmember_id});
     </insert>
 
     <delete id="del"  parameterType="int">
@@ -29,11 +29,8 @@
         <if test="name != null ">
             where  thelog_contents like ${name}
         </if>
-            limit ${pageindex},${pagesize}
     </select>
 
-    <select id="Count"  resultType="int" >
-        SELECT MAX (thelog_id) from   thelog
-    </select>
+
 
 </mapper>

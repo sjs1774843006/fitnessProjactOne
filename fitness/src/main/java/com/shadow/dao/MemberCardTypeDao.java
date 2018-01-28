@@ -16,6 +16,8 @@ public interface MemberCardTypeDao {
 
     List<MemberCardTypeEntity> selectAll(Map<String, Object> map);
 
+    MemberCardTypeEntity selectOne(int id);
+
     int  selectCount(Map<String, Object> map);
 
     int  Count();

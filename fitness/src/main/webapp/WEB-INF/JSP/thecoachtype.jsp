@@ -3,7 +3,8 @@
 <html lang="en">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Title</title>
+    <link rel="icon" href="/statics/images/bitbug_favicon.ico" type="image/x-icon"/>
+    <title>教练类型</title>
     <link rel="stylesheet" href="/statics/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/statics/css/toastr.min.css">
     <link rel="stylesheet" href="/statics/css/datetimepicker.css">
@@ -24,6 +25,8 @@
 
     <script>
         $(function(){
+
+
             $('#table').bootstrapTable({
                 method:'get',//提交方式
                 url: 'querythecoachlist.do',//提交地址
@@ -129,6 +132,7 @@
                     }
                     else if(data.success=="defeated"){
                         parent.toastr.error('修改数据失败', '温馨提示',messageOpts);
+                        $("#table").bootstrapTable('refresh');
                     }
                 }
             });
@@ -148,6 +152,7 @@
                     }
                     else if(data.success=="defeated"){
                         parent.toastr.error('数据增加失败', '温馨提示',messageOpts);
+                        $("#table").bootstrapTable('refresh');
                     }
                 }
             });

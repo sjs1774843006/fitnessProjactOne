@@ -22,6 +22,10 @@
             limit ${pageindex},${pagesize}
     </select>
 
+    <select id="selectOne"  resultType="com.shadow.entity.DataDictionaryEntity"  parameterType="int">
+        SELECT * from  data_dictionary  where data_id=#{data_id}
+    </select>
+
     <select id="selectCount"  resultType="int"  parameterType="Map">
         SELECT count(*) from   data_dictionary
         <if test="name != null ">

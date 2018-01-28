@@ -16,6 +16,8 @@ public interface CommissionDataDao {
 
     List<CommissionDataEntity> selectAll(Map<String, Object> map);
 
+    CommissionDataEntity selectOne(int id);
+
     int  selectCount(Map<String, Object> map);
 
     int  Count();

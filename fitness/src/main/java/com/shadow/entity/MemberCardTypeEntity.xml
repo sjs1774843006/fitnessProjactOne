@@ -24,6 +24,10 @@
             limit ${pageindex},${pagesize}
     </select>
 
+    <select id="selectOne"  resultType="MemberCardTypeEntity"  parameterType="int">
+        SELECT * from  member_card_type   where member_card_type_id=#{member_card_type_id}
+    </select>
+
     <select id="selectCount"  resultType="int"  parameterType="Map">
         SELECT count(*) from   member_card_type
         <if test="name != null ">
@@ -32,7 +36,7 @@
     </select>
 
     <select id="Count"  resultType="int" >
-        SELECT MAX (member_card_type_id) from   member_card_type
+        SELECT MAX(member_card_type_id) from   member_card_type
     </select>
 
 </mapper>
