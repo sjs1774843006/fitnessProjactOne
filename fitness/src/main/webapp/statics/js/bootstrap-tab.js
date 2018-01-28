@@ -138,7 +138,7 @@ function  addTabs(moduletitle,moduId,moduleurl,optionsclose) {
         title += '</a></li>';
         //是否指定TAB内容
        if (moduleurl==""||moduId==null) {
-           content = '<div role="tabpanel" class="tab-pane" id="' + id + '">' + moduletitle + '</div>';
+           content = '<div role="tabpanel" class="tab-pane" id="' + id + '"><iframe id="iframe_'+id+'" src="/error.html" width="100%" height="100%" onload="changeFrameHeight(this)" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" allowtransparency="yes"></iframe></div>';
        } else {//没有内容，使用IFRAME打开链接
             content = '<div role="tabpanel" class="tab-pane" id="' + id + '"><iframe id="iframe_'+id+'" src="' + moduleurl +
             '" width="100%" height="100%" onload="changeFrameHeight(this)" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" allowtransparency="yes"></iframe></div>';
